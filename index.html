@@ -21,6 +21,14 @@
         color: #fff;
         overflow: hidden;
         height: 100vh;
+        width: 100vw;
+        position: fixed;
+        touch-action: none;
+        -webkit-overflow-scrolling: touch;
+        user-select: none;
+        -webkit-user-select: none;
+        -webkit-touch-callout: none;
+        -webkit-text-size-adjust: 100%;
     }
 
     .screen {
@@ -33,6 +41,8 @@
         align-items: center;
         justify-content: center;
         transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
+        touch-action: none;
+        overflow: hidden;
     }
 
     .screen.hidden {
@@ -184,12 +194,15 @@
     /* 3D Screen */
     .canvas-screen {
         background: #000;
+        touch-action: none;
     }
 
     #canvas-container {
         width: 100%;
         height: 100%;
         position: relative;
+        touch-action: none;
+        overflow: hidden;
     }
 
     .back-button {
@@ -386,23 +399,57 @@
         setupOrbitControls() {
             let lastTouchDistance = 0;
             
+            // Prevent default touch behaviors
+            document.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+            }, { passive: false });
+            
+            document.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+            }, { passive: false });
+            
+            document.addEventListener('touchend', (e) => {
+                e.preventDefault();
+            }, { passive: false });
+            
+            // Prevent context menu on long press
+            document.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+            });
+            
+            // Prevent zoom gestures
+            document.addEventListener('gesturestart', (e) => {
+                e.preventDefault();
+            });
+            
+            document.addEventListener('gesturechange', (e) => {
+                e.preventDefault();
+            });
+            
+            document.addEventListener('gestureend', (e) => {
+                e.preventDefault();
+            });
+            
             // Mouse events
             document.addEventListener('mousedown', (e) => {
                 if (this.canvasScreen.classList.contains('hidden')) return;
                 this.isMouseDown = true;
                 this.previousMousePosition = { x: e.clientX, y: e.clientY };
+                e.preventDefault();
             });
 
             document.addEventListener('mousemove', (e) => {
                 if (!this.isMouseDown || this.canvasScreen.classList.contains('hidden')) return;
                 this.handleRotation(e.clientX, e.clientY);
+                e.preventDefault();
             });
 
-            document.addEventListener('mouseup', () => {
+            document.addEventListener('mouseup', (e) => {
                 this.isMouseDown = false;
+                e.preventDefault();
             });
 
-            // Touch events
+            // Touch events for 3D controls
             document.addEventListener('touchstart', (e) => {
                 if (this.canvasScreen.classList.contains('hidden')) return;
                 
@@ -418,8 +465,7 @@
                     const dy = e.touches[0].clientY - e.touches[1].clientY;
                     lastTouchDistance = Math.sqrt(dx * dx + dy * dy);
                 }
-                e.preventDefault();
-            });
+            }, { passive: false });
 
             document.addEventListener('touchmove', (e) => {
                 if (this.canvasScreen.classList.contains('hidden')) return;
@@ -437,15 +483,14 @@
                     }
                     lastTouchDistance = distance;
                 }
-                e.preventDefault();
-            });
+            }, { passive: false });
 
             document.addEventListener('touchend', (e) => {
                 this.isMouseDown = false;
                 if (e.touches.length === 0) {
                     lastTouchDistance = 0;
                 }
-            });
+            }, { passive: false });
 
             // Mouse wheel for zoom
             document.addEventListener('wheel', (e) => {
@@ -453,18 +498,19 @@
                 const delta = e.deltaY * 0.01;
                 this.targetDistance = Math.max(2, Math.min(15, this.targetDistance + delta));
                 e.preventDefault();
-            });
+            }, { passive: false });
 
             // Double tap to reset
             let lastTap = 0;
             document.addEventListener('touchend', (e) => {
+                if (this.canvasScreen.classList.contains('hidden')) return;
                 const currentTime = new Date().getTime();
                 const tapLength = currentTime - lastTap;
                 if (tapLength < 500 && tapLength > 0) {
                     this.resetCamera();
                 }
                 lastTap = currentTime;
-            });
+            }, { passive: false });
         }
 
         handleRotation(clientX, clientY) {
