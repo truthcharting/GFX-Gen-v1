@@ -522,10 +522,11 @@
             document.addEventListener('touchend', (e) => {
                 if (this.canvasScreen.classList.contains('hidden')) return;
                 
-                if (canvas3D() && canvas3D().contains(e.target)) {
+                if (canvas3D() && canvas3D().contains(e.target) && e.touches.length === 0) {
                     const currentTime = new Date().getTime();
                     const tapLength = currentTime - lastTap;
                     if (tapLength < 500 && tapLength > 0) {
+                        console.log('Double tap detected - resetting camera'); // Debug log
                         this.resetCamera();
                     }
                     lastTap = currentTime;
@@ -549,6 +550,7 @@
         }
 
         resetCamera() {
+            console.log('Camera reset triggered'); // Debug log
             this.targetRotation = { x: 0, y: 0 };
             this.targetDistance = 5;
         }
@@ -643,20 +645,25 @@
         }
         
         createCanvasText(text) {
+            // Split text into lines and handle multi-line rendering
+            const lines = text.split('\n').filter(line => line.trim().length > 0); // Remove empty lines
+            
             // Create high-quality text using canvas with WebGL-safe dimensions
             const canvas = document.createElement('canvas');
             const context = canvas.getContext('2d');
             
-            // High resolution but WebGL-safe (max 4096x4096 is widely supported)
+            // Calculate canvas size based on number of lines
+            const lineHeight = 220; // Space between lines
+            const padding = 100; // Top and bottom padding
             canvas.width = 4096;
-            canvas.height = 1024;
+            canvas.height = Math.max(1024, (lines.length * lineHeight) + (padding * 2));
             
             // Clear background to transparent
             context.clearRect(0, 0, canvas.width, canvas.height);
             
             // Style the text with high quality settings
             context.fillStyle = '#ffffff';
-            context.font = 'bold 200px Arial, Helvetica, sans-serif';
+            context.font = 'bold 200px system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
             context.textAlign = 'center';
             context.textBaseline = 'middle';
             context.imageSmoothingEnabled = true;
@@ -668,8 +675,12 @@
             context.shadowOffsetX = 6;
             context.shadowOffsetY = 6;
             
-            // Draw the main text
-            context.fillText(text, canvas.width / 2, canvas.height / 2);
+            // Draw each line of text
+            const startY = padding + (lineHeight / 2);
+            lines.forEach((line, index) => {
+                const y = startY + (index * lineHeight);
+                context.fillText(line.trim(), canvas.width / 2, y);
+            });
             
             // Create texture from canvas with highest quality settings
             const texture = new THREE.CanvasTexture(canvas);
@@ -681,7 +692,7 @@
             texture.wrapS = THREE.ClampToEdgeWrap;
             texture.wrapT = THREE.ClampToEdgeWrap;
             
-            // Create 3D geometry with proper depth
+            // Keep geometry consistent - don't stretch based on line count
             const geometry = new THREE.BoxGeometry(6, 1.5, 0.4);
             
             // Create materials array - text only on front face, transparent elsewhere
