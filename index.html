@@ -384,6 +384,10 @@
             height: auto;
             border-radius: 10px;
             background: #000;
+            pointer-events: auto;
+            -webkit-touch-callout: default;
+            -webkit-user-select: auto;
+            user-select: auto;
         }
 
         .video-instructions {
@@ -677,6 +681,10 @@
                 
                 // Prevent context menu on long press
                 document.addEventListener('contextmenu', (e) => {
+                    // Allow context menu on video element
+                    if (e.target.tagName === 'VIDEO') {
+                        return; // Don't prevent - allow normal video context menu
+                    }
                     e.preventDefault();
                 });
                 
