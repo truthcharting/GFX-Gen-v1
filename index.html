@@ -316,6 +316,104 @@
             min-width: 100px;
         }
 
+        /* Video Modal */
+        .video-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .video-modal.show {
+            display: flex;
+        }
+
+        .video-modal-content {
+            background: #111;
+            border-radius: 20px;
+            padding: 20px;
+            max-width: 90vw;
+            max-height: 90vh;
+            border: 1px solid #333;
+            position: relative;
+        }
+
+        .video-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .video-modal-header h3 {
+            color: #fff;
+            margin: 0;
+            font-size: 1.3em;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5em;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        #renderedVideo {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            border-radius: 10px;
+            background: #000;
+        }
+
+        .video-instructions {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .video-instructions p {
+            color: #ccc;
+            margin: 8px 0;
+            font-size: 0.9em;
+        }
+
+        .download-fallback {
+            background: linear-gradient(45deg, #666, #555);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 15px;
+            color: #fff;
+            font-size: 0.9em;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .download-fallback:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
         .keyframe-status {
             color: #aaa;
             font-size: 0.8em;
@@ -401,8 +499,26 @@
             <button class="keyframe-btn" id="setStartBtn">Set Start</button>
             <button class="keyframe-btn" id="setEndBtn" disabled>Set End</button>
             <button class="play-btn" id="playBtn" disabled>▶ Play (7s)</button>
-            <button class="render-btn" id="renderBtn" disabled>🎥 Render MP4</button>
+            <button class="render-btn" id="renderBtn" disabled>🎥 Render Video</button>
             <div class="keyframe-status" id="keyframeStatus">Position camera and set start keyframe</div>
+        </div>
+
+        <!-- Video Player Modal -->
+        <div class="video-modal" id="videoModal">
+            <div class="video-modal-content">
+                <div class="video-modal-header">
+                    <h3>🎉 Video Ready!</h3>
+                    <button class="close-modal" id="closeModal">×</button>
+                </div>
+                <video id="renderedVideo" controls playsinline webkit-playsinline>
+                    Your browser doesn't support video playback.
+                </video>
+                <div class="video-instructions">
+                    <p><strong>📱 iPhone:</strong> Long press video → "Save Video" → Camera Roll!</p>
+                    <p><strong>🖥️ Desktop:</strong> Right click video → "Save video as..."</p>
+                    <button class="download-fallback" id="downloadFallback">📥 Download File Instead</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -437,6 +553,7 @@
                 this.isRecording = false;
                 this.mediaRecorder = null;
                 this.recordedChunks = [];
+                this.currentVideoBlob = null;
                 
                 this.initializeElements();
                 this.setupEventListeners();
@@ -460,6 +577,12 @@
                 this.playBtn = document.getElementById('playBtn');
                 this.renderBtn = document.getElementById('renderBtn');
                 this.keyframeStatus = document.getElementById('keyframeStatus');
+                
+                // Video modal elements
+                this.videoModal = document.getElementById('videoModal');
+                this.renderedVideo = document.getElementById('renderedVideo');
+                this.closeModal = document.getElementById('closeModal');
+                this.downloadFallback = document.getElementById('downloadFallback');
             }
 
             setupEventListeners() {
@@ -495,6 +618,22 @@
 
                 this.renderBtn.addEventListener('click', () => {
                     this.startRender();
+                });
+
+                // Video modal listeners
+                this.closeModal.addEventListener('click', () => {
+                    this.closeVideoModal();
+                });
+
+                this.downloadFallback.addEventListener('click', () => {
+                    this.downloadVideo();
+                });
+
+                // Close modal when clicking outside
+                this.videoModal.addEventListener('click', (e) => {
+                    if (e.target === this.videoModal) {
+                        this.closeVideoModal();
+                    }
                 });
 
                 // Touch and mouse events for orbit controls
@@ -1011,20 +1150,16 @@
             processRecording() {
                 // Create blob from recorded chunks
                 const blob = new Blob(this.recordedChunks, { type: 'video/webm' });
+                this.currentVideoBlob = blob;
                 
-                // Create download link
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `3d-text-animation-${Date.now()}.webm`;
+                // Create video URL and show in modal
+                const videoURL = URL.createObjectURL(blob);
+                this.renderedVideo.src = videoURL;
                 
-                // Trigger download
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
+                // Show video modal
+                this.showVideoModal();
                 
-                // Clean up
-                URL.revokeObjectURL(url);
+                // Clean up recorded chunks
                 this.recordedChunks = [];
                 
                 // Re-enable controls
@@ -1032,10 +1167,48 @@
                 this.setEndBtn.disabled = false;
                 this.playBtn.disabled = false;
                 this.renderBtn.disabled = false;
-                this.renderBtn.textContent = '🎥 Render MP4';
-                this.keyframeStatus.textContent = 'Video exported! Ready for next render';
+                this.renderBtn.textContent = '🎥 Render Video';
+                this.keyframeStatus.textContent = 'Video ready! Long-press to save to camera roll';
                 
-                console.log('Recording processed and downloaded');
+                console.log('Recording processed and ready for viewing');
+            }
+
+            // Video Modal Management
+            showVideoModal() {
+                this.videoModal.classList.add('show');
+                // Auto-play the video
+                setTimeout(() => {
+                    this.renderedVideo.play().catch(e => console.log('Autoplay prevented:', e));
+                }, 100);
+            }
+
+            closeVideoModal() {
+                this.videoModal.classList.remove('show');
+                // Clean up video URL to free memory
+                if (this.renderedVideo.src) {
+                    URL.revokeObjectURL(this.renderedVideo.src);
+                    this.renderedVideo.src = '';
+                }
+            }
+
+            downloadVideo() {
+                if (this.currentVideoBlob) {
+                    // Create download link as fallback
+                    const url = URL.createObjectURL(this.currentVideoBlob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `3d-text-animation-${Date.now()}.webm`;
+                    
+                    // Trigger download
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    
+                    // Clean up
+                    URL.revokeObjectURL(url);
+                    
+                    console.log('Video downloaded as fallback');
+                }
             }
 
             createBackgroundPlane() {
