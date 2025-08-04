@@ -8,6 +8,7 @@ A Progressive Web App (PWA) that transforms your text into stunning 3D graphics 
 - **3D Text Generation**: Convert any text into beautiful 3D graphics
 - **Foreground Images**: Use custom images as foreground elements (replaces text)
 - **PNG Transparency**: Full support for PNG images with transparent backgrounds
+- **Entrance Animations**: Animate foreground images from different directions
 - **Background Images**: Add custom background images to your 3D scenes
 - **Multi-line Support**: Support for multi-line text with proper formatting
 - **High-Quality Rendering**: Uses Three.js with maximum quality settings
@@ -49,8 +50,9 @@ A Progressive Web App (PWA) that transforms your text into stunning 3D graphics 
 ### Creating 3D Content
 1. **Input Text**: Type or paste your text (up to 100 characters)
 2. **Foreground Image (Optional)**: Upload an image to replace the text (supports PNG transparency)
-3. **Background (Optional)**: Upload an image for the background
-4. **Generate**: Click the button to create your 3D scene
+3. **Entrance Animation (Optional)**: Choose animation direction for foreground images
+4. **Background (Optional)**: Upload an image for the background
+5. **Generate**: Click the button to create your 3D scene
 
 **Note**: If both text and foreground image are provided, the foreground image will be used instead of the text.
 
@@ -76,6 +78,14 @@ A Progressive Web App (PWA) that transforms your text into stunning 3D graphics 
 - **Background Images**: PNG, JPG, JPEG, WebP
 - **High Quality**: Maintains aspect ratio and image quality
 - **Transparency**: Full PNG alpha channel support for foreground images
+
+### Entrance Animations
+- **From Top**: Image animates in from above with linear start and smooth ease-out
+- **From Bottom**: Image animates in from below with linear start and smooth ease-out
+- **From Left**: Image animates in from the left with linear start and smooth ease-out
+- **From Right**: Image animates in from the right with linear start and smooth ease-out
+- **Duration**: 3-second entrance animation, completes at 1/3 of the 7-second video
+- **Easing**: Linear start with 10th power ease-out for smooth deceleration
 
 ## 🛠️ Technical Details
 

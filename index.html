@@ -428,6 +428,86 @@
             margin-top: 5px;
         }
 
+        /* Animation Options Styling */
+        .animation-options {
+            margin-top: 1em;
+            padding: 1em;
+            background: #111;
+            border: 2px solid #333;
+            border-radius: 12px;
+            transition: border-color 0.3s ease;
+        }
+
+        .animation-options-title {
+            color: #888;
+            font-size: 0.9em;
+            font-weight: 800;
+            margin-bottom: 0.8em;
+            text-align: center;
+        }
+
+        .animation-checkboxes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8em;
+            justify-content: center;
+        }
+
+        .animation-checkbox {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .animation-checkbox input[type="radio"] {
+            display: none;
+        }
+
+        .checkbox-custom {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #333;
+            border-radius: 50%;
+            margin-right: 8px;
+            position: relative;
+            transition: all 0.3s ease;
+            background: #111;
+        }
+
+        .animation-checkbox input[type="radio"]:checked + .checkbox-custom {
+            border-color: #4a90e2;
+            background: #4a90e2;
+        }
+
+        .animation-checkbox input[type="radio"]:checked + .checkbox-custom::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 6px;
+            height: 6px;
+            background: #fff;
+            border-radius: 50%;
+        }
+
+        .checkbox-label {
+            color: #ccc;
+            font-size: 0.9em;
+            font-weight: 800;
+            transition: color 0.3s ease;
+        }
+
+        .animation-checkbox:hover .checkbox-label {
+            color: #4a90e2;
+        }
+
+        .animation-checkbox:hover .checkbox-custom {
+            border-color: #4a90e2;
+        }
+
         @media (max-width: 600px) {
             .title {
                 font-size: 2em;
@@ -483,6 +563,33 @@
                     <input type="file" id="foregroundInput" class="file-input" accept="image/*">
                 </label>
                 <div class="file-preview" id="foregroundPreview"></div>
+                
+                <!-- Animation Options -->
+                <div class="animation-options" id="animationOptions" style="display: none;">
+                    <div class="animation-options-title">Entrance Animation:</div>
+                    <div class="animation-checkboxes">
+                        <label class="animation-checkbox">
+                            <input type="radio" name="entranceAnimation" value="fromTop" id="fromTop">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-label">From Top</span>
+                        </label>
+                        <label class="animation-checkbox">
+                            <input type="radio" name="entranceAnimation" value="fromBottom" id="fromBottom">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-label">From Bottom</span>
+                        </label>
+                        <label class="animation-checkbox">
+                            <input type="radio" name="entranceAnimation" value="fromLeft" id="fromLeft">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-label">From Left</span>
+                        </label>
+                        <label class="animation-checkbox">
+                            <input type="radio" name="entranceAnimation" value="fromRight" id="fromRight">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-label">From Right</span>
+                        </label>
+                    </div>
+                </div>
             </div>
             
             <div class="input-group">

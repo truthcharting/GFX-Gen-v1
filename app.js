@@ -14,6 +14,7 @@ class TextGenerator3D {
         this.targetDistance = 5;
         this.backgroundImage = null;
         this.foregroundImage = null;
+        this.entranceAnimation = null;
         
         // Animation system
         this.isAnimating = false;
@@ -23,6 +24,12 @@ class TextGenerator3D {
             start: null,
             end: null
         };
+        
+        // Entrance animation system
+        this.isEntranceAnimating = false;
+        this.entranceStartTime = 0;
+        this.entranceDuration = 3000; // 3 seconds for entrance - longer for smoother animation
+        this.entranceEndTime = 2333; // 1/3 of 7 seconds (2333ms)
         
         // Recording system
         this.isRecording = false;
@@ -40,6 +47,7 @@ class TextGenerator3D {
         this.textInput = document.getElementById('textInput');
         this.foregroundInput = document.getElementById('foregroundInput');
         this.foregroundPreview = document.getElementById('foregroundPreview');
+        this.animationOptions = document.getElementById('animationOptions');
         this.backgroundInput = document.getElementById('backgroundInput');
         this.filePreview = document.getElementById('filePreview');
         this.nextButton = document.getElementById('nextButton');
@@ -69,6 +77,13 @@ class TextGenerator3D {
 
         this.foregroundInput.addEventListener('change', (e) => {
             this.handleForegroundFileUpload(e);
+        });
+
+        // Animation options event listeners
+        document.querySelectorAll('input[name="entranceAnimation"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                this.entranceAnimation = e.target.value;
+            });
         });
 
         this.backgroundInput.addEventListener('change', (e) => {
@@ -145,6 +160,9 @@ class TextGenerator3D {
                     <div class="file-name">${file.name}</div>
                 `;
                 
+                // Show animation options
+                this.animationOptions.style.display = 'block';
+                
                 // Update button state
                 this.updateNextButtonState();
             };
@@ -155,6 +173,12 @@ class TextGenerator3D {
             fileLabel.classList.remove('has-file');
             fileLabel.querySelector('.file-label-text').textContent = 'Choose Foreground Image (Optional - replaces text)';
             this.foregroundPreview.innerHTML = '';
+            this.animationOptions.style.display = 'none';
+            this.entranceAnimation = null;
+            // Uncheck all radio buttons
+            document.querySelectorAll('input[name="entranceAnimation"]').forEach(radio => {
+                radio.checked = false;
+            });
             this.updateNextButtonState();
         }
     }
@@ -379,6 +403,7 @@ class TextGenerator3D {
         
         // Reset foreground image state
         this.foregroundImage = null;
+        this.entranceAnimation = null;
         const foregroundLabel = document.querySelector('label[for="foregroundInput"]');
         if (foregroundLabel) {
             foregroundLabel.classList.remove('has-file');
@@ -387,6 +412,13 @@ class TextGenerator3D {
         if (this.foregroundPreview) {
             this.foregroundPreview.innerHTML = '';
         }
+        if (this.animationOptions) {
+            this.animationOptions.style.display = 'none';
+        }
+        // Uncheck all radio buttons
+        document.querySelectorAll('input[name="entranceAnimation"]').forEach(radio => {
+            radio.checked = false;
+        });
         
         // Update button state
         this.updateNextButtonState();
@@ -568,19 +600,26 @@ class TextGenerator3D {
                 loadedTexture.generateMipmaps = false; // Disable for maximum sharpness
                 loadedTexture.wrapS = THREE.ClampToEdgeWrap;
                 loadedTexture.wrapT = THREE.ClampToEdgeWrap;
+                loadedTexture.premultiplyAlpha = false; // Important: don't premultiply alpha
             });
             
             // Create material
             const material = new THREE.MeshBasicMaterial({
                 map: texture,
                 transparent: true,
-                alphaTest: 0.1
+                alphaTest: 0.1,
+                premultipliedAlpha: false // Important: don't use premultiplied alpha
             });
             
             // Create the mesh
             this.textMesh = new THREE.Mesh(geometry, material);
             this.textMesh.castShadow = false;
             this.textMesh.receiveShadow = false;
+            
+            // Set initial position for entrance animation
+            if (this.entranceAnimation) {
+                this.setEntranceStartPosition();
+            }
             
             this.scene.add(this.textMesh);
             
@@ -590,6 +629,82 @@ class TextGenerator3D {
         
         // Set the image source to trigger the onload
         img.src = this.foregroundImage;
+    }
+
+    setEntranceStartPosition() {
+        if (!this.textMesh || !this.entranceAnimation) return;
+        
+        const distance = 25; // How far to start from - increased for more dramatic effect
+        
+        switch (this.entranceAnimation) {
+            case 'fromTop':
+                this.textMesh.position.set(0, distance, 0);
+                break;
+            case 'fromBottom':
+                this.textMesh.position.set(0, -distance, 0);
+                break;
+            case 'fromLeft':
+                this.textMesh.position.set(-distance, 0, 0);
+                break;
+            case 'fromRight':
+                this.textMesh.position.set(distance, 0, 0);
+                break;
+        }
+    }
+
+    startEntranceAnimation() {
+        if (!this.entranceAnimation) return;
+        
+        this.isEntranceAnimating = true;
+        this.entranceStartTime = performance.now();
+        console.log('Entrance animation started:', this.entranceAnimation);
+    }
+
+    updateEntranceAnimation() {
+        if (!this.isEntranceAnimating || !this.textMesh) return;
+
+        const currentTime = performance.now();
+        const elapsed = currentTime - this.entranceStartTime;
+        const progress = Math.min(elapsed / this.entranceDuration, 1);
+
+        // Linear start with very strong ease-out at the end
+        const easeOut = (t) => 1 - Math.pow(1 - t, 10); // 10th power ease-out
+        const easedProgress = easeOut(progress);
+
+        // Calculate target position (center)
+        const targetX = 0;
+        const targetY = 0;
+        const targetZ = 0;
+
+        // Get start position based on animation type
+        let startX = 0, startY = 0, startZ = 0;
+        const distance = 25; // Increased distance for more dramatic effect
+        
+        switch (this.entranceAnimation) {
+            case 'fromTop':
+                startY = distance;
+                break;
+            case 'fromBottom':
+                startY = -distance;
+                break;
+            case 'fromLeft':
+                startX = -distance;
+                break;
+            case 'fromRight':
+                startX = distance;
+                break;
+        }
+
+        // Interpolate position
+        this.textMesh.position.x = startX + (targetX - startX) * easedProgress;
+        this.textMesh.position.y = startY + (targetY - startY) * easedProgress;
+        this.textMesh.position.z = startZ + (targetZ - startZ) * easedProgress;
+
+        // Check if entrance animation is complete
+        if (progress >= 1) {
+            this.isEntranceAnimating = false;
+            console.log('Entrance animation completed');
+        }
     }
 
     // Keyframe and Animation System
@@ -624,6 +739,11 @@ class TextGenerator3D {
 
         this.isAnimating = true;
         this.animationStartTime = performance.now();
+        
+        // Start entrance animation if enabled
+        if (this.entranceAnimation && this.textMesh) {
+            this.startEntranceAnimation();
+        }
         
         // Disable controls during animation
         this.setStartBtn.disabled = true;
@@ -840,6 +960,7 @@ class TextGenerator3D {
                 loadedTexture.generateMipmaps = false; // Disable for maximum sharpness
                 loadedTexture.wrapS = THREE.ClampToEdgeWrap;
                 loadedTexture.wrapT = THREE.ClampToEdgeWrap;
+                loadedTexture.premultiplyAlpha = false; // Important: don't premultiply alpha
             });
             
             // Create material
@@ -862,25 +983,25 @@ class TextGenerator3D {
     }
 
     setupLighting() {
-        // Ambient light
-        const ambientLight = new THREE.AmbientLight(0x404040, 0.3);
+        // Ambient light - much darker
+        const ambientLight = new THREE.AmbientLight(0x404040, 0.03);
         this.scene.add(ambientLight);
 
-        // Main directional light
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        // Main directional light - much darker
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.08);
         directionalLight.position.set(5, 5, 5);
         directionalLight.castShadow = true;
         directionalLight.shadow.mapSize.width = 2048;
         directionalLight.shadow.mapSize.height = 2048;
         this.scene.add(directionalLight);
 
-        // Fill light
-        const fillLight = new THREE.DirectionalLight(0x4a90e2, 0.3);
+        // Fill light - much darker
+        const fillLight = new THREE.DirectionalLight(0x4a90e2, 0.03);
         fillLight.position.set(-5, 0, 2);
         this.scene.add(fillLight);
 
-        // Rim light
-        const rimLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        // Rim light - much darker
+        const rimLight = new THREE.DirectionalLight(0xffffff, 0.05);
         rimLight.position.set(0, 5, -5);
         this.scene.add(rimLight);
     }
@@ -892,6 +1013,9 @@ class TextGenerator3D {
 
         // Update animation if playing
         this.updateAnimation();
+        
+        // Update entrance animation
+        this.updateEntranceAnimation();
 
         // Only apply smooth camera movement if not animating
         if (!this.isAnimating) {
