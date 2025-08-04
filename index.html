@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D GFX Generator</title>
+    <title>3D Text Generator</title>
     <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiM0QgVGV4dCBHZW5lcmF0b3IiLCJzaG9ydF9uYW1lIjoiM0QgVGV4dCIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwidGhlbWVfY29sb3IiOiIjMDAwMDAwIiwiYmFja2dyb3VuZF9jb2xvciI6IiMwMDAwMDAiLCJzdGFydF91cmwiOiIvIiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjJhV1YzUW05NFBTSXdJREFnTWpRZ01qUWlQaUJ5WldOMElIZHBaSFJvUFNJeU5DSWdhR1ZwWjJoMFBTSXlOQ0lnWm1sc2JEMGlJek16TXpNek15SWdlRzFzYm5NOUltaDBkSEE2THk5M2QzY3Vkek11YjNKbkx6SXdNREF2YzNabklpOCtQSEpsWTNRZ2VEMGlOaUlnZVQwaU5pSWdkMmxrZEdnOUlqRXlJaUJvWldsbmFIUTlJakV5SWlCeWVEMGlNaUlnWm1sc2JEMGlJalF6TkVNME15SXZQand2YzNablBnPT0iLCJzaXplcyI6IjI0eDI0IiwidHlwZSI6ImltYWdlL3N2Zyt4bWwifV19">
     <meta name="theme-color" content="#000000">
     <style>
@@ -13,451 +14,456 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #000;
-            color: #fff;
-            overflow: hidden;
-            height: 100vh;
-            width: 100vw;
-            position: fixed;
-            -webkit-overflow-scrolling: touch;
-            user-select: none;
-            -webkit-user-select: none;
-            -webkit-touch-callout: none;
-            -webkit-text-size-adjust: 100%;
-        }
+```
+    body {
+        font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
+        font-weight: 800;
+        background: #000;
+        color: #fff;
+        overflow: hidden;
+        height: 100vh;
+        width: 100vw;
+        position: fixed;
+        -webkit-overflow-scrolling: touch;
+        user-select: none;
+        -webkit-user-select: none;
+        -webkit-touch-callout: none;
+        -webkit-text-size-adjust: 100%;
+    }
 
-        .screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
-            overflow: hidden;
-        }
+    .screen {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
+        overflow: hidden;
+    }
 
-        .screen.hidden {
-            transform: translateX(-100%);
-            opacity: 0;
-            pointer-events: none;
-        }
+    .screen.hidden {
+        transform: translateX(-100%);
+        opacity: 0;
+        pointer-events: none;
+    }
 
-        /* Input Screen */
-        .input-screen {
-            flex-direction: column;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-        }
+    /* Input Screen */
+    .input-screen {
+        flex-direction: column;
+        background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+    }
 
-        .container {
-            max-width: 500px;
-            width: 90%;
-            text-align: center;
-        }
+    .container {
+        max-width: 500px;
+        width: 90%;
+        text-align: center;
+    }
 
+    .title {
+        font-size: 2.5em;
+        font-weight: 800;
+        margin-bottom: 0.5em;
+        background: linear-gradient(45deg, #fff, #888);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .subtitle {
+        font-size: 1.1em;
+        color: #888;
+        margin-bottom: 2em;
+        font-weight: 800;
+    }
+
+    .input-group {
+        margin-bottom: 2em;
+    }
+
+    .text-input {
+        width: 100%;
+        padding: 1em;
+        background: #111;
+        border: 2px solid #333;
+        border-radius: 12px;
+        color: #fff;
+        font-size: 1.1em;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 800;
+        resize: none;
+        min-height: 120px;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        touch-action: manipulation;
+        user-select: text;
+        -webkit-user-select: text;
+    }
+
+    .text-input:focus {
+        outline: none;
+        border-color: #4a90e2;
+        box-shadow: 0 0 20px rgba(74, 144, 226, 0.3);
+    }
+
+    .text-input::placeholder {
+        color: #555;
+    }
+
+    .next-button {
+        background: linear-gradient(45deg, #4a90e2, #357abd);
+        border: none;
+        padding: 1em 2em;
+        border-radius: 25px;
+        color: #fff;
+        font-size: 1.1em;
+        font-weight: 800;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+        touch-action: manipulation;
+    }
+
+    .next-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 25px rgba(74, 144, 226, 0.4);
+    }
+
+    .next-button:active {
+        transform: translateY(0);
+    }
+
+    .next-button:disabled {
+        background: #333;
+        color: #666;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    /* File Upload Styling */
+    .file-label {
+        display: block;
+        width: 100%;
+        padding: 1em;
+        background: #111;
+        border: 2px dashed #333;
+        border-radius: 12px;
+        color: #888;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 1em;
+        touch-action: manipulation;
+    }
+
+    .file-label:hover {
+        border-color: #4a90e2;
+        background: #151515;
+    }
+
+    .file-label.has-file {
+        border-color: #4a90e2;
+        background: rgba(74, 144, 226, 0.1);
+        color: #4a90e2;
+    }
+
+    .file-input {
+        display: none;
+    }
+
+    .file-label-text {
+        display: block;
+        font-size: 1em;
+    }
+
+    .file-preview {
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    .file-preview img {
+        max-width: 200px;
+        max-height: 100px;
+        border-radius: 8px;
+        border: 1px solid #333;
+    }
+
+    .file-preview .file-name {
+        color: #4a90e2;
+        font-size: 0.9em;
+        margin-top: 5px;
+    }
+
+    /* 3D Screen */
+    .canvas-screen {
+        background: #000;
+        touch-action: none;
+    }
+
+    #canvas-container {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        touch-action: none;
+        overflow: hidden;
+    }
+
+    .back-button {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        z-index: 100;
+        background: rgba(0, 0, 0, 0.7);
+        border: 1px solid #333;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+        touch-action: manipulation;
+    }
+
+    .back-button:hover {
+        background: rgba(74, 144, 226, 0.8);
+        border-color: #4a90e2;
+    }
+
+    .loading {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #4a90e2;
+        font-size: 1.2em;
+        z-index: 50;
+    }
+
+    .controls {
+        position: absolute;
+        bottom: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.7);
+        padding: 15px 25px;
+        border-radius: 25px;
+        color: #fff;
+        font-size: 0.9em;
+        z-index: 100;
+        backdrop-filter: blur(10px);
+        border: 1px solid #333;
+    }
+
+    /* Animation Controls */
+    .animation-controls {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.8);
+        padding: 15px 20px;
+        border-radius: 20px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        z-index: 101;
+        backdrop-filter: blur(10px);
+        border: 1px solid #333;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .keyframe-btn, .play-btn, .render-btn {
+        background: linear-gradient(45deg, #4a90e2, #357abd);
+        border: none;
+        padding: 8px 16px;
+        border-radius: 15px;
+        color: #fff;
+        font-size: 0.9em;
+        font-weight: 800;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        touch-action: manipulation;
+        min-width: 70px;
+    }
+
+    .keyframe-btn:hover, .play-btn:hover, .render-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 15px rgba(74, 144, 226, 0.4);
+    }
+
+    .keyframe-btn:disabled, .play-btn:disabled, .render-btn:disabled {
+        background: #333;
+        color: #666;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .keyframe-btn.set {
+        background: linear-gradient(45deg, #4CAF50, #45a049);
+    }
+
+    .play-btn {
+        background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+        font-size: 1em;
+        padding: 10px 20px;
+    }
+
+    .render-btn {
+        background: linear-gradient(45deg, #9c27b0, #7b1fa2);
+        font-size: 1em;
+        padding: 10px 16px;
+        min-width: 100px;
+    }
+
+    /* Video Modal */
+    .video-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        backdrop-filter: blur(10px);
+    }
+
+    .video-modal.show {
+        display: flex;
+    }
+
+    .video-modal-content {
+        background: #111;
+        border-radius: 20px;
+        padding: 20px;
+        max-width: 90vw;
+        max-height: 90vh;
+        border: 1px solid #333;
+        position: relative;
+    }
+
+    .video-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .video-modal-header h3 {
+        color: #fff;
+        margin: 0;
+        font-size: 1.3em;
+    }
+
+    .close-modal {
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 1.5em;
+        cursor: pointer;
+        padding: 5px;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.3s ease;
+    }
+
+    .close-modal:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    #renderedVideo {
+        width: 100%;
+        max-width: 600px;
+        height: auto;
+        border-radius: 10px;
+        background: #000;
+        pointer-events: auto;
+        -webkit-touch-callout: default;
+        -webkit-user-select: auto;
+        user-select: auto;
+    }
+
+    .video-instructions {
+        margin-top: 15px;
+        text-align: center;
+    }
+
+    .video-instructions p {
+        color: #ccc;
+        margin: 8px 0;
+        font-size: 0.9em;
+    }
+
+    .download-fallback {
+        background: linear-gradient(45deg, #666, #555);
+        border: none;
+        padding: 10px 20px;
+        border-radius: 15px;
+        color: #fff;
+        font-size: 0.9em;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .download-fallback:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .keyframe-status {
+        color: #aaa;
+        font-size: 0.8em;
+        text-align: center;
+        width: 100%;
+        margin-top: 5px;
+    }
+
+        @media (max-width: 600px) {
         .title {
-            font-size: 2.5em;
-            font-weight: 300;
-            margin-bottom: 0.5em;
-            background: linear-gradient(45deg, #fff, #888);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-size: 2em;
         }
-
-        .subtitle {
-            font-size: 1.1em;
-            color: #888;
-            margin-bottom: 2em;
-            font-weight: 300;
+        
+        .container {
+            width: 95%;
         }
-
-        .input-group {
-            margin-bottom: 2em;
-        }
-
-        .text-input {
-            width: 100%;
-            padding: 1em;
-            background: #111;
-            border: 2px solid #333;
-            border-radius: 12px;
-            color: #fff;
-            font-size: 1.1em;
-            font-family: inherit;
-            resize: none;
-            min-height: 120px;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            touch-action: manipulation;
-            user-select: text;
-            -webkit-user-select: text;
-        }
-
-        .text-input:focus {
-            outline: none;
-            border-color: #4a90e2;
-            box-shadow: 0 0 20px rgba(74, 144, 226, 0.3);
-        }
-
-        .text-input::placeholder {
-            color: #555;
-        }
-
-        .next-button {
-            background: linear-gradient(45deg, #4a90e2, #357abd);
-            border: none;
-            padding: 1em 2em;
-            border-radius: 25px;
-            color: #fff;
-            font-size: 1.1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
-            touch-action: manipulation;
-        }
-
-        .next-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(74, 144, 226, 0.4);
-        }
-
-        .next-button:active {
-            transform: translateY(0);
-        }
-
-        .next-button:disabled {
-            background: #333;
-            color: #666;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* File Upload Styling */
-        .file-label {
-            display: block;
-            width: 100%;
-            padding: 1em;
-            background: #111;
-            border: 2px dashed #333;
-            border-radius: 12px;
-            color: #888;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 1em;
-            touch-action: manipulation;
-        }
-
-        .file-label:hover {
-            border-color: #4a90e2;
-            background: #151515;
-        }
-
-        .file-label.has-file {
-            border-color: #4a90e2;
-            background: rgba(74, 144, 226, 0.1);
-            color: #4a90e2;
-        }
-
-        .file-input {
-            display: none;
-        }
-
-        .file-label-text {
-            display: block;
-            font-size: 1em;
-        }
-
-        .file-preview {
-            margin-top: 10px;
-            text-align: center;
-        }
-
-        .file-preview img {
-            max-width: 200px;
-            max-height: 100px;
-            border-radius: 8px;
-            border: 1px solid #333;
-        }
-
-        .file-preview .file-name {
-            color: #4a90e2;
-            font-size: 0.9em;
-            margin-top: 5px;
-        }
-
-        /* 3D Screen */
-        .canvas-screen {
-            background: #000;
-            touch-action: none;
-        }
-
-        #canvas-container {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            touch-action: none;
-            overflow: hidden;
-        }
-
-        .back-button {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            z-index: 100;
-            background: rgba(0, 0, 0, 0.7);
-            border: 1px solid #333;
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-family: inherit;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            touch-action: manipulation;
-        }
-
-        .back-button:hover {
-            background: rgba(74, 144, 226, 0.8);
-            border-color: #4a90e2;
-        }
-
-        .loading {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #4a90e2;
-            font-size: 1.2em;
-            z-index: 50;
-        }
-
+        
         .controls {
-            position: absolute;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.7);
-            padding: 15px 25px;
-            border-radius: 25px;
-            color: #fff;
-            font-size: 0.9em;
-            z-index: 100;
-            backdrop-filter: blur(10px);
-            border: 1px solid #333;
-        }
-
-        /* Animation Controls */
-        .animation-controls {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            padding: 15px 20px;
-            border-radius: 20px;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            z-index: 101;
-            backdrop-filter: blur(10px);
-            border: 1px solid #333;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .keyframe-btn, .play-btn, .render-btn {
-            background: linear-gradient(45deg, #4a90e2, #357abd);
-            border: none;
-            padding: 8px 16px;
-            border-radius: 15px;
-            color: #fff;
-            font-size: 0.9em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            touch-action: manipulation;
-            min-width: 70px;
-        }
-
-        .keyframe-btn:hover, .play-btn:hover, .render-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.4);
-        }
-
-        .keyframe-btn:disabled, .play-btn:disabled, .render-btn:disabled {
-            background: #333;
-            color: #666;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .keyframe-btn.set {
-            background: linear-gradient(45deg, #4CAF50, #45a049);
-        }
-
-        .play-btn {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
-            font-size: 1em;
-            padding: 10px 20px;
-        }
-
-        .render-btn {
-            background: linear-gradient(45deg, #9c27b0, #7b1fa2);
-            font-size: 1em;
-            padding: 10px 16px;
-            min-width: 100px;
-        }
-
-        /* Video Modal */
-        .video-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-        }
-
-        .video-modal.show {
-            display: flex;
-        }
-
-        .video-modal-content {
-            background: #111;
-            border-radius: 20px;
-            padding: 20px;
-            max-width: 90vw;
-            max-height: 90vh;
-            border: 1px solid #333;
-            position: relative;
-        }
-
-        .video-modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .video-modal-header h3 {
-            color: #fff;
-            margin: 0;
-            font-size: 1.3em;
-        }
-
-        .close-modal {
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 1.5em;
-            cursor: pointer;
-            padding: 5px;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.3s ease;
-        }
-
-        .close-modal:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        #renderedVideo {
-            width: 100%;
-            max-width: 600px;
-            height: auto;
-            border-radius: 10px;
-            background: #000;
-            pointer-events: auto;
-            -webkit-touch-callout: default;
-            -webkit-user-select: auto;
-            user-select: auto;
-        }
-
-        .video-instructions {
-            margin-top: 15px;
-            text-align: center;
-        }
-
-        .video-instructions p {
-            color: #ccc;
-            margin: 8px 0;
-            font-size: 0.9em;
-        }
-
-        .download-fallback {
-            background: linear-gradient(45deg, #666, #555);
-            border: none;
-            padding: 10px 20px;
-            border-radius: 15px;
-            color: #fff;
-            font-size: 0.9em;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .download-fallback:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .keyframe-status {
-            color: #aaa;
+            bottom: 130px;
             font-size: 0.8em;
-            text-align: center;
-            width: 100%;
-            margin-top: 5px;
+            padding: 10px 20px;
         }
+        
+        .animation-controls {
+            bottom: 10px;
+            padding: 10px 15px;
+            gap: 8px;
+        }
+        
+        .keyframe-btn, .play-btn, .render-btn {
+            font-size: 0.8em;
+            padding: 6px 12px;
+            min-width: 60px;
+        }
+        
+        .keyframe-status {
+            font-size: 0.7em;
+        }
+    }
+</style>
+```
 
-            @media (max-width: 600px) {
-            .title {
-                font-size: 2em;
-            }
-            
-            .container {
-                width: 95%;
-            }
-            
-            .controls {
-                bottom: 130px;
-                font-size: 0.8em;
-                padding: 10px 20px;
-            }
-            
-            .animation-controls {
-                bottom: 10px;
-                padding: 10px 15px;
-                gap: 8px;
-            }
-            
-            .keyframe-btn, .play-btn, .render-btn {
-                font-size: 0.8em;
-                padding: 6px 12px;
-                min-width: 60px;
-            }
-            
-            .keyframe-status {
-                font-size: 0.7em;
-            }
-        }
-    </style>
 </head>
 <body>
     <!-- Input Screen -->
@@ -465,525 +471,628 @@
         <div class="container">
             <h1 class="title">3D Text Generator</h1>
             <p class="subtitle">Transform your words into stunning 3D graphics</p>
-            
-            <div class="input-group">
-                <textarea 
-                    class="text-input" 
-                    id="textInput" 
-                    placeholder="Enter your text here...&#10;Try something creative!"
-                    maxlength="100"
-                ></textarea>
-            </div>
-            
-            <div class="input-group">
-                <label class="file-label" for="backgroundInput">
-                    <span class="file-label-text">Choose Background Image (Optional)</span>
-                    <input type="file" id="backgroundInput" class="file-input" accept="image/*">
-                </label>
-                <div class="file-preview" id="filePreview"></div>
-            </div>
-            
-            <button class="next-button" id="nextButton" disabled>
-                Generate 3D Text
-            </button>
-        </div>
-    </div>
 
-    <!-- 3D Canvas Screen -->
-    <div class="screen canvas-screen hidden" id="canvasScreen">
-        <button class="back-button" id="backButton">← Back</button>
-        <div class="loading" id="loading">Loading 3D scene...</div>
-        <div id="canvas-container"></div>
-        <div class="controls">
-            Drag to rotate • Pinch to zoom • Double-tap to reset
+```
+        <div class="input-group">
+            <label class="file-label" for="foregroundInput">
+                <span class="file-label-text">Choose Foreground Image (Optional)</span>
+                <input type="file" id="foregroundInput" class="file-input" accept="image/*">
+            </label>
+            <div class="file-preview" id="foregroundPreview"></div>
         </div>
         
-        <!-- Animation Controls -->
-        <div class="animation-controls" id="animationControls">
-            <button class="keyframe-btn" id="setStartBtn">Set Start</button>
-            <button class="keyframe-btn" id="setEndBtn" disabled>Set End</button>
-            <button class="play-btn" id="playBtn" disabled>▶ Play (7s)</button>
-            <button class="render-btn" id="renderBtn" disabled>🎥 Render Video</button>
-            <div class="keyframe-status" id="keyframeStatus">Position camera and set start keyframe</div>
+        <div class="input-group">
+            <textarea 
+                class="text-input" 
+                id="textInput" 
+                placeholder="Enter your text here...&#10;Try something creative!"
+                maxlength="100"
+            ></textarea>
         </div>
+        
+        <div class="input-group">
+            <label class="file-label" for="backgroundInput">
+                <span class="file-label-text">Choose Background Image (Optional)</span>
+                <input type="file" id="backgroundInput" class="file-input" accept="image/*">
+            </label>
+            <div class="file-preview" id="filePreview"></div>
+        </div>
+        
+        <button class="next-button" id="nextButton" disabled>
+            Generate 3D Graphics
+        </button>
+    </div>
+</div>
 
-        <!-- Video Player Modal -->
-        <div class="video-modal" id="videoModal">
-            <div class="video-modal-content">
-                <div class="video-modal-header">
-                    <h3>🎉 Video Ready!</h3>
-                    <button class="close-modal" id="closeModal">×</button>
-                </div>
-                <video id="renderedVideo" controls playsinline webkit-playsinline>
-                    Your browser doesn't support video playback.
-                </video>
-                <div class="video-instructions">
-                    <p><strong>📱 iPhone:</strong> Long press video → "Save Video" → Camera Roll!</p>
-                    <p><strong>🖥️ Desktop:</strong> Right click video → "Save video as..."</p>
-                    <button class="download-fallback" id="downloadFallback">📥 Download File Instead</button>
-                </div>
+<!-- 3D Canvas Screen -->
+<div class="screen canvas-screen hidden" id="canvasScreen">
+    <button class="back-button" id="backButton">← Back</button>
+    <div class="loading" id="loading">Loading 3D scene...</div>
+    <div id="canvas-container"></div>
+    <div class="controls">
+        Drag to rotate • Pinch to zoom • Double-tap to reset
+    </div>
+    
+    <!-- Animation Controls -->
+    <div class="animation-controls" id="animationControls">
+        <button class="keyframe-btn" id="setStartBtn">Set Start</button>
+        <button class="keyframe-btn" id="setEndBtn" disabled>Set End</button>
+        <button class="play-btn" id="playBtn" disabled>▶ Play (7s)</button>
+        <button class="render-btn" id="renderBtn" disabled>🎥 Render Video</button>
+        <div class="keyframe-status" id="keyframeStatus">Position camera and set start keyframe</div>
+    </div>
+
+    <!-- Video Player Modal -->
+    <div class="video-modal" id="videoModal">
+        <div class="video-modal-content">
+            <div class="video-modal-header">
+                <h3>🎉 Video Ready!</h3>
+                <button class="close-modal" id="closeModal">×</button>
+            </div>
+            <video id="renderedVideo" controls playsinline webkit-playsinline>
+                Your browser doesn't support video playback.
+            </video>
+            <div class="video-instructions">
+                <p><strong>📱 iPhone:</strong> Long press video → "Save Video" → Camera Roll!</p>
+                <p><strong>🖥️ Desktop:</strong> Right click video → "Save video as..."</p>
+                <button class="download-fallback" id="downloadFallback">📥 Download File Instead</button>
             </div>
         </div>
     </div>
+</div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script>
-        class TextGenerator3D {
-            constructor() {
-                this.scene = null;
-                this.camera = null;
-                this.renderer = null;
-                this.textMesh = null;
-                this.backgroundMesh = null;
-                this.controls = null;
-                this.isMouseDown = false;
-                this.previousMousePosition = { x: 0, y: 0 };
-                this.rotation = { x: 0, y: 0 };
-                this.targetRotation = { x: 0, y: 0 };
-                this.distance = 5;
-                this.targetDistance = 5;
-                this.backgroundImage = null;
-                
-                // Animation system
-                this.isAnimating = false;
-                this.animationStartTime = 0;
-                this.animationDuration = 7000; // 7 seconds
-                this.keyframes = {
-                    start: null,
-                    end: null
-                };
-                
-                // Recording system
-                this.isRecording = false;
-                this.mediaRecorder = null;
-                this.recordedChunks = [];
-                this.currentVideoBlob = null;
-                
-                this.initializeElements();
-                this.setupEventListeners();
-            }
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+    class TextGenerator3D {
+        constructor() {
+            this.scene = null;
+            this.camera = null;
+            this.renderer = null;
+            this.textMesh = null;
+            this.backgroundMesh = null;
+            this.controls = null;
+            this.isMouseDown = false;
+            this.previousMousePosition = { x: 0, y: 0 };
+            this.rotation = { x: 0, y: 0 };
+            this.targetRotation = { x: 0, y: 0 };
+            this.distance = 5;
+            this.targetDistance = 5;
+            this.backgroundImage = null;
+            this.foregroundImage = null;
+            
+            // Animation system
+            this.isAnimating = false;
+            this.animationStartTime = 0;
+            this.animationDuration = 7000; // 7 seconds
+            this.keyframes = {
+                start: null,
+                end: null
+            };
+            
+            // Recording system
+            this.isRecording = false;
+            this.mediaRecorder = null;
+            this.recordedChunks = [];
+            this.currentVideoBlob = null;
+            
+            this.initializeElements();
+            this.setupEventListeners();
+        }
 
-            initializeElements() {
-                this.inputScreen = document.getElementById('inputScreen');
-                this.canvasScreen = document.getElementById('canvasScreen');
-                this.textInput = document.getElementById('textInput');
-                this.backgroundInput = document.getElementById('backgroundInput');
-                this.filePreview = document.getElementById('filePreview');
-                this.nextButton = document.getElementById('nextButton');
-                this.backButton = document.getElementById('backButton');
-                this.loading = document.getElementById('loading');
-                this.canvasContainer = document.getElementById('canvas-container');
-                
-                // Animation controls
-                this.animationControls = document.getElementById('animationControls');
-                this.setStartBtn = document.getElementById('setStartBtn');
-                this.setEndBtn = document.getElementById('setEndBtn');
-                this.playBtn = document.getElementById('playBtn');
-                this.renderBtn = document.getElementById('renderBtn');
-                this.keyframeStatus = document.getElementById('keyframeStatus');
-                
-                // Video modal elements
-                this.videoModal = document.getElementById('videoModal');
-                this.renderedVideo = document.getElementById('renderedVideo');
-                this.closeModal = document.getElementById('closeModal');
-                this.downloadFallback = document.getElementById('downloadFallback');
-            }
+        initializeElements() {
+            this.inputScreen = document.getElementById('inputScreen');
+            this.canvasScreen = document.getElementById('canvasScreen');
+            this.textInput = document.getElementById('textInput');
+            this.foregroundInput = document.getElementById('foregroundInput');
+            this.foregroundPreview = document.getElementById('foregroundPreview');
+            this.backgroundInput = document.getElementById('backgroundInput');
+            this.filePreview = document.getElementById('filePreview');
+            this.nextButton = document.getElementById('nextButton');
+            this.backButton = document.getElementById('backButton');
+            this.loading = document.getElementById('loading');
+            this.canvasContainer = document.getElementById('canvas-container');
+            
+            // Animation controls
+            this.animationControls = document.getElementById('animationControls');
+            this.setStartBtn = document.getElementById('setStartBtn');
+            this.setEndBtn = document.getElementById('setEndBtn');
+            this.playBtn = document.getElementById('playBtn');
+            this.renderBtn = document.getElementById('renderBtn');
+            this.keyframeStatus = document.getElementById('keyframeStatus');
+            
+            // Video modal elements
+            this.videoModal = document.getElementById('videoModal');
+            this.renderedVideo = document.getElementById('renderedVideo');
+            this.closeModal = document.getElementById('closeModal');
+            this.downloadFallback = document.getElementById('downloadFallback');
+        }
 
-            setupEventListeners() {
-                this.textInput.addEventListener('input', () => {
-                    const hasText = this.textInput.value.trim().length > 0;
-                    this.nextButton.disabled = !hasText;
-                });
+        setupEventListeners() {
+            this.textInput.addEventListener('input', () => {
+                this.updateGenerateButton();
+            });
 
-                this.backgroundInput.addEventListener('change', (e) => {
-                    this.handleFileUpload(e);
-                });
+            this.foregroundInput.addEventListener('change', (e) => {
+                this.handleForegroundUpload(e);
+            });
 
-                this.nextButton.addEventListener('click', () => {
-                    this.showCanvasScreen();
-                });
+            this.backgroundInput.addEventListener('change', (e) => {
+                this.handleBackgroundUpload(e);
+            });
 
-                this.backButton.addEventListener('click', () => {
-                    this.showInputScreen();
-                });
+            this.nextButton.addEventListener('click', () => {
+                this.showCanvasScreen();
+            });
 
-                // Animation control listeners
-                this.setStartBtn.addEventListener('click', () => {
-                    this.setKeyframe('start');
-                });
+            this.backButton.addEventListener('click', () => {
+                this.showInputScreen();
+            });
 
-                this.setEndBtn.addEventListener('click', () => {
-                    this.setKeyframe('end');
-                });
+            // Animation control listeners
+            this.setStartBtn.addEventListener('click', () => {
+                this.setKeyframe('start');
+            });
 
-                this.playBtn.addEventListener('click', () => {
-                    this.playAnimation();
-                });
+            this.setEndBtn.addEventListener('click', () => {
+                this.setKeyframe('end');
+            });
 
-                this.renderBtn.addEventListener('click', () => {
-                    this.startRender();
-                });
+            this.playBtn.addEventListener('click', () => {
+                this.playAnimation();
+            });
 
-                // Video modal listeners
-                this.closeModal.addEventListener('click', () => {
+            this.renderBtn.addEventListener('click', () => {
+                this.startRender();
+            });
+
+            // Video modal listeners
+            this.closeModal.addEventListener('click', () => {
+                this.closeVideoModal();
+            });
+
+            this.downloadFallback.addEventListener('click', () => {
+                this.downloadVideo();
+            });
+
+            // Close modal when clicking outside
+            this.videoModal.addEventListener('click', (e) => {
+                if (e.target === this.videoModal) {
                     this.closeVideoModal();
-                });
-
-                this.downloadFallback.addEventListener('click', () => {
-                    this.downloadVideo();
-                });
-
-                // Close modal when clicking outside
-                this.videoModal.addEventListener('click', (e) => {
-                    if (e.target === this.videoModal) {
-                        this.closeVideoModal();
-                    }
-                });
-
-                // Touch and mouse events for orbit controls
-                this.setupOrbitControls();
-            }
-
-            handleFileUpload(event) {
-                const file = event.target.files[0];
-                const fileLabel = document.querySelector('.file-label');
-                
-                if (file && file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        this.backgroundImage = e.target.result;
-                        
-                        // Update UI
-                        fileLabel.classList.add('has-file');
-                        fileLabel.querySelector('.file-label-text').textContent = 'Background Selected ✓';
-                        
-                        // Show preview
-                        this.filePreview.innerHTML = `
-                            <img src="${this.backgroundImage}" alt="Background preview">
-                            <div class="file-name">${file.name}</div>
-                        `;
-                    };
-                    reader.readAsDataURL(file);
-                } else {
-                    // Reset if invalid file
-                    this.backgroundImage = null;
-                    fileLabel.classList.remove('has-file');
-                    fileLabel.querySelector('.file-label-text').textContent = 'Choose Background Image (Optional)';
-                    this.filePreview.innerHTML = '';
                 }
-            }
+            });
 
-            setupOrbitControls() {
-                let lastTouchDistance = 0;
-                
-                // Only prevent default touch behaviors on the 3D canvas area
-                const canvas3D = () => this.canvasContainer;
-                
-                // Prevent context menu on long press
-                document.addEventListener('contextmenu', (e) => {
-                    // Allow context menu on video element
-                    if (e.target.tagName === 'VIDEO') {
-                        return; // Don't prevent - allow normal video context menu
-                    }
-                    e.preventDefault();
-                });
-                
-                // Prevent zoom gestures only
-                document.addEventListener('gesturestart', (e) => {
-                    e.preventDefault();
-                });
-                
-                document.addEventListener('gesturechange', (e) => {
-                    e.preventDefault();
-                });
-                
-                document.addEventListener('gestureend', (e) => {
-                    e.preventDefault();
-                });
-                
-                // Mouse events
-                document.addEventListener('mousedown', (e) => {
-                    if (this.canvasScreen.classList.contains('hidden')) return;
+            // Touch and mouse events for orbit controls
+            this.setupOrbitControls();
+        }
+
+        updateGenerateButton() {
+            // Enable button if there's text OR a foreground image
+            const hasText = this.textInput.value.trim().length > 0;
+            const hasForegroundImage = this.foregroundImage !== null;
+            this.nextButton.disabled = !(hasText || hasForegroundImage);
+        }
+
+        handleForegroundUpload(event) {
+            const file = event.target.files[0];
+            const fileLabel = this.foregroundInput.parentElement;
+            
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    this.foregroundImage = e.target.result;
                     
-                    // Only handle mouse events on the canvas area
-                    if (canvas3D() && canvas3D().contains(e.target)) {
-                        this.isMouseDown = true;
-                        this.previousMousePosition = { x: e.clientX, y: e.clientY };
-                        e.preventDefault();
-                    }
-                });
-
-                document.addEventListener('mousemove', (e) => {
-                    if (!this.isMouseDown || this.canvasScreen.classList.contains('hidden')) return;
-                    this.handleRotation(e.clientX, e.clientY);
-                    e.preventDefault();
-                });
-
-                document.addEventListener('mouseup', (e) => {
-                    this.isMouseDown = false;
-                });
-
-                // Touch events for 3D controls - only on canvas area
-                document.addEventListener('touchstart', (e) => {
-                    if (this.canvasScreen.classList.contains('hidden')) return;
+                    // Update UI
+                    fileLabel.classList.add('has-file');
+                    fileLabel.querySelector('.file-label-text').textContent = 'Foreground Selected ✓';
                     
-                    // Only handle touch events on the canvas area
-                    if (canvas3D() && canvas3D().contains(e.target)) {
-                        if (e.touches.length === 1) {
-                            this.isMouseDown = true;
-                            this.previousMousePosition = { 
-                                x: e.touches[0].clientX, 
-                                y: e.touches[0].clientY 
-                            };
-                        } else if (e.touches.length === 2) {
-                            this.isMouseDown = false;
-                            const dx = e.touches[0].clientX - e.touches[1].clientX;
-                            const dy = e.touches[0].clientY - e.touches[1].clientY;
-                            lastTouchDistance = Math.sqrt(dx * dx + dy * dy);
-                        }
-                        e.preventDefault();
-                    }
-                }, { passive: false });
-
-                document.addEventListener('touchmove', (e) => {
-                    if (this.canvasScreen.classList.contains('hidden')) return;
+                    // Show preview
+                    this.foregroundPreview.innerHTML = `
+                        <img src="${this.foregroundImage}" alt="Foreground preview">
+                        <div class="file-name">${file.name}</div>
+                    `;
                     
-                    // Only handle touch events on the canvas area or if we're already dragging
-                    if ((canvas3D() && canvas3D().contains(e.target)) || this.isMouseDown) {
-                        if (e.touches.length === 1 && this.isMouseDown) {
-                            this.handleRotation(e.touches[0].clientX, e.touches[0].clientY);
-                        } else if (e.touches.length === 2) {
-                            const dx = e.touches[0].clientX - e.touches[1].clientX;
-                            const dy = e.touches[0].clientY - e.touches[1].clientY;
-                            const distance = Math.sqrt(dx * dx + dy * dy);
-                            
-                            if (lastTouchDistance > 0) {
-                                // More stable zoom calculation
-                                const scale = distance / lastTouchDistance;
-                                const zoomFactor = (scale - 1) * 2; // Adjust sensitivity
-                                this.targetDistance = Math.max(2, Math.min(15, this.targetDistance - zoomFactor));
-                            }
-                            lastTouchDistance = distance;
-                        }
-                        e.preventDefault();
-                    }
-                }, { passive: false });
-
-                document.addEventListener('touchend', (e) => {
-                    if (this.canvasScreen.classList.contains('hidden')) return;
-                    
-                    this.isMouseDown = false;
-                    // Only reset lastTouchDistance when all touches are gone
-                    if (e.touches.length === 0) {
-                        lastTouchDistance = 0;
-                    } else if (e.touches.length === 1) {
-                        // If we go from 2 touches to 1, stop zooming but don't reset distance
-                        lastTouchDistance = 0;
-                    }
-                });
-
-                // Mouse wheel for zoom
-                document.addEventListener('wheel', (e) => {
-                    if (this.canvasScreen.classList.contains('hidden')) return;
-                    
-                    // Only handle wheel events on the canvas area
-                    if (canvas3D() && canvas3D().contains(e.target)) {
-                        const delta = e.deltaY * 0.01;
-                        this.targetDistance = Math.max(2, Math.min(15, this.targetDistance + delta));
-                        e.preventDefault();
-                    }
-                }, { passive: false });
-
-                // Double tap to reset - only on canvas area
-                let lastTap = 0;
-                document.addEventListener('touchend', (e) => {
-                    if (this.canvasScreen.classList.contains('hidden')) return;
-                    
-                    if (canvas3D() && canvas3D().contains(e.target) && e.touches.length === 0) {
-                        const currentTime = new Date().getTime();
-                        const tapLength = currentTime - lastTap;
-                        if (tapLength < 500 && tapLength > 0) {
-                            console.log('Double tap detected - resetting camera'); // Debug log
-                            this.resetCamera();
-                        }
-                        lastTap = currentTime;
-                    }
-                });
-            }
-
-            handleRotation(clientX, clientY) {
-                const deltaMove = {
-                    x: clientX - this.previousMousePosition.x,
-                    y: clientY - this.previousMousePosition.y
+                    this.updateGenerateButton();
                 };
-
-                this.targetRotation.y -= deltaMove.x * 0.01; // Inverted horizontal movement
-                this.targetRotation.x += deltaMove.y * 0.01;
-                
-                // Clamp vertical rotation
-                this.targetRotation.x = Math.max(-Math.PI/2, Math.min(Math.PI/2, this.targetRotation.x));
-
-                this.previousMousePosition = { x: clientX, y: clientY };
+                reader.readAsDataURL(file);
+            } else {
+                // Reset if invalid file
+                this.foregroundImage = null;
+                fileLabel.classList.remove('has-file');
+                fileLabel.querySelector('.file-label-text').textContent = 'Choose Foreground Image (Optional)';
+                this.foregroundPreview.innerHTML = '';
+                this.updateGenerateButton();
             }
+        }
 
-            resetCamera() {
-                console.log('Camera reset triggered'); // Debug log
-                this.targetRotation = { x: 0, y: 0 };
-                this.targetDistance = 5;
+        handleBackgroundUpload(event) {
+            const file = event.target.files[0];
+            const fileLabel = this.backgroundInput.parentElement;
+            
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    this.backgroundImage = e.target.result;
+                    
+                    // Update UI
+                    fileLabel.classList.add('has-file');
+                    fileLabel.querySelector('.file-label-text').textContent = 'Background Selected ✓';
+                    
+                    // Show preview
+                    this.filePreview.innerHTML = `
+                        <img src="${this.backgroundImage}" alt="Background preview">
+                        <div class="file-name">${file.name}</div>
+                    `;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                // Reset if invalid file
+                this.backgroundImage = null;
+                fileLabel.classList.remove('has-file');
+                fileLabel.querySelector('.file-label-text').textContent = 'Choose Background Image (Optional)';
+                this.filePreview.innerHTML = '';
             }
+        }
 
-            showCanvasScreen() {
-                this.inputScreen.classList.add('hidden');
-                this.canvasScreen.classList.remove('hidden');
-                this.loading.style.display = 'block';
-                
-                setTimeout(() => {
-                    this.init3DScene();
-                }, 100);
-            }
-
-            showInputScreen() {
-                this.canvasScreen.classList.add('hidden');
-                this.inputScreen.classList.remove('hidden');
-                
-                if (this.renderer) {
-                    this.canvasContainer.removeChild(this.renderer.domElement);
-                    this.renderer.dispose();
-                    this.renderer = null;
+        setupOrbitControls() {
+            let lastTouchDistance = 0;
+            
+            // Only prevent default touch behaviors on the 3D canvas area
+            const canvas3D = () => this.canvasContainer;
+            
+            // Prevent context menu on long press
+            document.addEventListener('contextmenu', (e) => {
+                // Allow context menu on video element
+                if (e.target.tagName === 'VIDEO') {
+                    return; // Don't prevent - allow normal video context menu
                 }
+                e.preventDefault();
+            });
+            
+            // Prevent zoom gestures only
+            document.addEventListener('gesturestart', (e) => {
+                e.preventDefault();
+            });
+            
+            document.addEventListener('gesturechange', (e) => {
+                e.preventDefault();
+            });
+            
+            document.addEventListener('gestureend', (e) => {
+                e.preventDefault();
+            });
+            
+            // Mouse events
+            document.addEventListener('mousedown', (e) => {
+                if (this.canvasScreen.classList.contains('hidden')) return;
                 
-                // Clean up meshes
-                if (this.textMesh) {
-                    this.scene.remove(this.textMesh);
-                    this.textMesh = null;
+                // Only handle mouse events on the canvas area
+                if (canvas3D() && canvas3D().contains(e.target)) {
+                    this.isMouseDown = true;
+                    this.previousMousePosition = { x: e.clientX, y: e.clientY };
+                    e.preventDefault();
                 }
-                if (this.backgroundMesh) {
-                    this.scene.remove(this.backgroundMesh);
-                    this.backgroundMesh = null;
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!this.isMouseDown || this.canvasScreen.classList.contains('hidden')) return;
+                this.handleRotation(e.clientX, e.clientY);
+                e.preventDefault();
+            });
+
+            document.addEventListener('mouseup', (e) => {
+                this.isMouseDown = false;
+            });
+
+            // Touch events for 3D controls - only on canvas area
+            document.addEventListener('touchstart', (e) => {
+                if (this.canvasScreen.classList.contains('hidden')) return;
+                
+                // Only handle touch events on the canvas area
+                if (canvas3D() && canvas3D().contains(e.target)) {
+                    if (e.touches.length === 1) {
+                        this.isMouseDown = true;
+                        this.previousMousePosition = { 
+                            x: e.touches[0].clientX, 
+                            y: e.touches[0].clientY 
+                        };
+                    } else if (e.touches.length === 2) {
+                        this.isMouseDown = false;
+                        const dx = e.touches[0].clientX - e.touches[1].clientX;
+                        const dy = e.touches[0].clientY - e.touches[1].clientY;
+                        lastTouchDistance = Math.sqrt(dx * dx + dy * dy);
+                    }
+                    e.preventDefault();
                 }
-            }
+            }, { passive: false });
 
-            init3DScene() {
-                const text = this.textInput.value.trim();
+            document.addEventListener('touchmove', (e) => {
+                if (this.canvasScreen.classList.contains('hidden')) return;
                 
-                // Scene setup
-                this.scene = new THREE.Scene();
-                
-                // Camera setup
-                this.camera = new THREE.PerspectiveCamera(
-                    75, 
-                    window.innerWidth / window.innerHeight, 
-                    0.1, 
-                    1000
-                );
-                
-                // Renderer setup with maximum quality settings
-                this.renderer = new THREE.WebGLRenderer({ 
-                    antialias: true,
-                    alpha: true,
-                    powerPreference: "high-performance",
-                    precision: "highp"
-                });
-                this.renderer.setSize(window.innerWidth, window.innerHeight);
-                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 3)); // Support up to 3x pixel density
-                this.renderer.setClearColor(0x000000);
-                this.renderer.shadowMap.enabled = true;
-                this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-                this.renderer.outputEncoding = THREE.sRGBEncoding;
-                this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-                this.renderer.toneMappingExposure = 1.0;
-                
-                this.canvasContainer.appendChild(this.renderer.domElement);
-
-                // Create background first (behind text)
-                if (this.backgroundImage) {
-                    this.createBackgroundPlane();
+                // Only handle touch events on the canvas area or if we're already dragging
+                if ((canvas3D() && canvas3D().contains(e.target)) || this.isMouseDown) {
+                    if (e.touches.length === 1 && this.isMouseDown) {
+                        this.handleRotation(e.touches[0].clientX, e.touches[0].clientY);
+                    } else if (e.touches.length === 2) {
+                        const dx = e.touches[0].clientX - e.touches[1].clientX;
+                        const dy = e.touches[0].clientY - e.touches[1].clientY;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (lastTouchDistance > 0) {
+                            // More stable zoom calculation
+                            const scale = distance / lastTouchDistance;
+                            const zoomFactor = (scale - 1) * 2; // Adjust sensitivity
+                            this.targetDistance = Math.max(2, Math.min(15, this.targetDistance - zoomFactor));
+                        }
+                        lastTouchDistance = distance;
+                    }
+                    e.preventDefault();
                 }
+            }, { passive: false });
 
-                // Create 3D text (in front)
-                this.create3DText(text);
+            document.addEventListener('touchend', (e) => {
+                if (this.canvasScreen.classList.contains('hidden')) return;
                 
-                // Lighting
-                this.setupLighting();
-                
-                // Start animation
-                this.animate();
-                
-                // Hide loading
-                this.loading.style.display = 'none';
-                
-                // Handle resize
-                window.addEventListener('resize', () => this.onWindowResize());
-            }
+                this.isMouseDown = false;
+                // Only reset lastTouchDistance when all touches are gone
+                if (e.touches.length === 0) {
+                    lastTouchDistance = 0;
+                } else if (e.touches.length === 1) {
+                    // If we go from 2 touches to 1, stop zooming but don't reset distance
+                    lastTouchDistance = 0;
+                }
+            });
 
-            create3DText(text) {
-                // Use canvas-based 3D text as the primary method for reliability
-                this.createCanvasText(text);
+            // Mouse wheel for zoom
+            document.addEventListener('wheel', (e) => {
+                if (this.canvasScreen.classList.contains('hidden')) return;
+                
+                // Only handle wheel events on the canvas area
+                if (canvas3D() && canvas3D().contains(e.target)) {
+                    const delta = e.deltaY * 0.01;
+                    this.targetDistance = Math.max(2, Math.min(15, this.targetDistance + delta));
+                    e.preventDefault();
+                }
+            }, { passive: false });
+
+            // Double tap to reset - only on canvas area
+            let lastTap = 0;
+            document.addEventListener('touchend', (e) => {
+                if (this.canvasScreen.classList.contains('hidden')) return;
+                
+                if (canvas3D() && canvas3D().contains(e.target) && e.touches.length === 0) {
+                    const currentTime = new Date().getTime();
+                    const tapLength = currentTime - lastTap;
+                    if (tapLength < 500 && tapLength > 0) {
+                        console.log('Double tap detected - resetting camera'); // Debug log
+                        this.resetCamera();
+                    }
+                    lastTap = currentTime;
+                }
+            });
+        }
+
+        handleRotation(clientX, clientY) {
+            const deltaMove = {
+                x: clientX - this.previousMousePosition.x,
+                y: clientY - this.previousMousePosition.y
+            };
+
+            this.targetRotation.y -= deltaMove.x * 0.01; // Inverted horizontal movement
+            this.targetRotation.x += deltaMove.y * 0.01;
+            
+            // Clamp vertical rotation
+            this.targetRotation.x = Math.max(-Math.PI/2, Math.min(Math.PI/2, this.targetRotation.x));
+
+            this.previousMousePosition = { x: clientX, y: clientY };
+        }
+
+        resetCamera() {
+            console.log('Camera reset triggered'); // Debug log
+            this.targetRotation = { x: 0, y: 0 };
+            this.targetDistance = 5;
+        }
+
+        showCanvasScreen() {
+            this.inputScreen.classList.add('hidden');
+            this.canvasScreen.classList.remove('hidden');
+            this.loading.style.display = 'block';
+            
+            setTimeout(() => {
+                this.init3DScene();
+            }, 100);
+        }
+
+        showInputScreen() {
+            this.canvasScreen.classList.add('hidden');
+            this.inputScreen.classList.remove('hidden');
+            
+            if (this.renderer) {
+                this.canvasContainer.removeChild(this.renderer.domElement);
+                this.renderer.dispose();
+                this.renderer = null;
             }
             
-            createCanvasText(text) {
-                // Split text into lines and handle multi-line rendering
-                const lines = text.split('\n').filter(line => line.trim().length > 0); // Remove empty lines
+            // Clean up meshes
+            if (this.textMesh) {
+                this.scene.remove(this.textMesh);
+                this.textMesh = null;
+            }
+            if (this.backgroundMesh) {
+                this.scene.remove(this.backgroundMesh);
+                this.backgroundMesh = null;
+            }
+        }
+
+        init3DScene() {
+            const text = this.textInput.value.trim();
+            
+            // Scene setup
+            this.scene = new THREE.Scene();
+            
+            // Camera setup
+            this.camera = new THREE.PerspectiveCamera(
+                75, 
+                window.innerWidth / window.innerHeight, 
+                0.1, 
+                1000
+            );
+            
+            // Renderer setup with maximum quality settings
+            this.renderer = new THREE.WebGLRenderer({ 
+                antialias: true,
+                alpha: true,
+                powerPreference: "high-performance",
+                precision: "highp"
+            });
+            this.renderer.setSize(window.innerWidth, window.innerHeight);
+            this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 3)); // Support up to 3x pixel density
+            this.renderer.setClearColor(0x000000);
+            this.renderer.shadowMap.enabled = true;
+            this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            this.renderer.outputEncoding = THREE.sRGBEncoding;
+            this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            this.renderer.toneMappingExposure = 1.0;
+            
+            this.canvasContainer.appendChild(this.renderer.domElement);
+
+            // Create background first (behind everything)
+            if (this.backgroundImage) {
+                this.createBackgroundPlane();
+            }
+
+            // Create 3D content (foreground image and/or text)
+            this.create3DContent();
+            
+            // Lighting
+            this.setupLighting();
+            
+            // Start animation
+            this.animate();
+            
+            // Hide loading
+            this.loading.style.display = 'none';
+            
+            // Handle resize
+            window.addEventListener('resize', () => this.onWindowResize());
+        }
+
+        create3DText(text) {
+            // Use canvas-based 3D text as the primary method for reliability
+            this.createCanvasText(text);
+        }
+        
+        createCanvasText(text) {
+            // Split text into lines and handle multi-line rendering
+            const lines = text.split('\n').filter(line => line.trim().length > 0); // Remove empty lines
+            
+            // Ensure Montserrat font is loaded before rendering
+            document.fonts.load('800 200px Montserrat').then(() => {
+                this.renderTextToCanvas(text, lines);
+            }).catch(() => {
+                // Fallback if font loading fails
+                console.warn('Montserrat font loading failed, using fallback');
+                this.renderTextToCanvas(text, lines);
+            });
+        }
+
+        renderTextToCanvas(text, lines) {
+            // Create high-quality text using canvas with WebGL-safe dimensions
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            
+            // Calculate canvas size based on number of lines
+            const lineHeight = 220; // Space between lines
+            const padding = 100; // Top and bottom padding
+            canvas.width = 4096;
+            canvas.height = Math.max(1024, (lines.length * lineHeight) + (padding * 2));
+            
+            // Clear background to transparent
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Style the text with high quality settings - Montserrat ExtraBold, no shadow
+            context.fillStyle = '#ffffff';
+            // Use CSS font syntax with explicit weight and family
+            context.font = '800 200px "Montserrat", "Arial Black", "Helvetica Neue", Arial, sans-serif';
+            context.textAlign = 'center';
+            context.textBaseline = 'middle';
+            context.imageSmoothingEnabled = true;
+            context.imageSmoothingQuality = 'high';
+            
+            // Reset any shadow properties to ensure no shadows
+            context.shadowColor = 'transparent';
+            context.shadowBlur = 0;
+            context.shadowOffsetX = 0;
+            context.shadowOffsetY = 0;
+            
+            // Draw each line of text (clean, no effects)
+            const startY = padding + (lineHeight / 2);
+            lines.forEach((line, index) => {
+                const y = startY + (index * lineHeight);
+                context.fillText(line.trim(), canvas.width / 2, y);
+            });
+            
+            // Create 3D object from text canvas
+            this.createMeshFromCanvas(canvas);
+        }
+        }
+
+        create3DContent() {
+            const text = this.textInput.value.trim();
+            const hasForegroundImage = this.foregroundImage !== null;
+            const hasText = text.length > 0;
+
+            if (hasForegroundImage && hasText) {
+                // Both image and text - create composite
+                this.createCompositeContent(text);
+            } else if (hasForegroundImage) {
+                // Only foreground image
+                this.createForegroundImagePlane();
+            } else if (hasText) {
+                // Only text
+                this.createCanvasText(text);
+            } else {
+                // Neither (shouldn't happen due to button validation)
+                this.loading.style.display = 'none';
+            }
+        }
+
+        createForegroundImagePlane() {
+            // Create a new image element to get dimensions
+            const img = new Image();
+            img.onload = () => {
+                // Calculate aspect ratio from the actual image
+                const aspectRatio = img.width / img.height;
                 
-                // Create high-quality text using canvas with WebGL-safe dimensions
-                const canvas = document.createElement('canvas');
-                const context = canvas.getContext('2d');
+                // Set a reasonable height and calculate width based on aspect ratio
+                const planeHeight = 2;
+                const planeWidth = planeHeight * aspectRatio;
                 
-                // Calculate canvas size based on number of lines
-                const lineHeight = 220; // Space between lines
-                const padding = 100; // Top and bottom padding
-                canvas.width = 4096;
-                canvas.height = Math.max(1024, (lines.length * lineHeight) + (padding * 2));
+                // Create geometry with correct aspect ratio
+                const geometry = new THREE.BoxGeometry(planeWidth, planeHeight, 0.4);
                 
-                // Clear background to transparent
-                context.clearRect(0, 0, canvas.width, canvas.height);
-                
-                // Style the text with high quality settings
-                context.fillStyle = '#ffffff';
-                context.font = 'bold 200px system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
-                context.textAlign = 'center';
-                context.textBaseline = 'middle';
-                context.imageSmoothingEnabled = true;
-                context.imageSmoothingQuality = 'high';
-                
-                // Add text shadow for depth effect
-                context.shadowColor = '#888888';
-                context.shadowBlur = 12;
-                context.shadowOffsetX = 6;
-                context.shadowOffsetY = 6;
-                
-                // Draw each line of text
-                const startY = padding + (lineHeight / 2);
-                lines.forEach((line, index) => {
-                    const y = startY + (index * lineHeight);
-                    context.fillText(line.trim(), canvas.width / 2, y);
+                // Create texture
+                const loader = new THREE.TextureLoader();
+                const texture = loader.load(this.foregroundImage, (loadedTexture) => {
+                    loadedTexture.minFilter = THREE.LinearFilter;
+                    loadedTexture.magFilter = THREE.LinearFilter;
+                    loadedTexture.format = THREE.RGBAFormat;
+                    loadedTexture.generateMipmaps = false;
+                    loadedTexture.wrapS = THREE.ClampToEdgeWrap;
+                    loadedTexture.wrapT = THREE.ClampToEdgeWrap;
                 });
                 
-                // Create texture from canvas with highest quality settings
-                const texture = new THREE.CanvasTexture(canvas);
-                texture.needsUpdate = true;
-                texture.minFilter = THREE.LinearFilter;
-                texture.magFilter = THREE.LinearFilter;
-                texture.format = THREE.RGBAFormat;
-                texture.generateMipmaps = false; // Disable mipmaps for sharpest quality
-                texture.wrapS = THREE.ClampToEdgeWrap;
-                texture.wrapT = THREE.ClampToEdgeWrap;
-                
-                // Keep geometry consistent - don't stretch based on line count
-                const geometry = new THREE.BoxGeometry(6, 1.5, 0.4);
-                
-                // Create materials array - text only on front face, transparent elsewhere
+                // Create materials array - image only on front face
                 const materials = [
-                    new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 }), // Right side - invisible
-                    new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 }), // Left side - invisible  
-                    new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 }), // Top - invisible
-                    new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 }), // Bottom - invisible
-                    new THREE.MeshBasicMaterial({ // Front face - visible with text
+                    new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 }), // Right
+                    new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 }), // Left
+                    new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 }), // Top
+                    new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 }), // Bottom
+                    new THREE.MeshBasicMaterial({ // Front face - visible with image
                         map: texture,
                         transparent: true,
                         alphaTest: 0.1
                     }),
-                    new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 }) // Back - invisible
+                    new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 }) // Back
                 ];
                 
                 // Create the mesh
@@ -992,375 +1101,446 @@
                 this.textMesh.receiveShadow = false;
                 
                 this.scene.add(this.textMesh);
-                
-                // Hide loading indicator
                 this.loading.style.display = 'none';
+            };
+            
+            img.src = this.foregroundImage;
+        }
+
+        createCompositeContent(text) {
+            // Split text into lines
+            const lines = text.split('\n').filter(line => line.trim().length > 0);
+            
+            // Load foreground image first
+            const img = new Image();
+            img.onload = () => {
+                // Ensure Montserrat font is loaded before rendering
+                document.fonts.load('800 200px Montserrat').then(() => {
+                    this.renderCompositeToCanvas(text, lines, img);
+                }).catch(() => {
+                    console.warn('Montserrat font loading failed, using fallback');
+                    this.renderCompositeToCanvas(text, lines, img);
+                });
+            };
+            img.src = this.foregroundImage;
+        }
+
+        renderCompositeToCanvas(text, lines, foregroundImg) {
+            // Create canvas
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            
+            // Calculate dimensions
+            const lineHeight = 220;
+            const padding = 100;
+            const imageHeight = 400; // Height for the foreground image
+            const imageSpacing = 50; // Space between image and text
+            
+            canvas.width = 4096;
+            canvas.height = Math.max(1024, imageHeight + imageSpacing + (lines.length * lineHeight) + (padding * 2));
+            
+            // Clear background
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw foreground image at top
+            const imgAspectRatio = foregroundImg.width / foregroundImg.height;
+            const imgWidth = imageHeight * imgAspectRatio;
+            const imgX = (canvas.width - imgWidth) / 2;
+            const imgY = padding;
+            
+            context.drawImage(foregroundImg, imgX, imgY, imgWidth, imageHeight);
+            
+            // Draw text below image
+            context.fillStyle = '#ffffff';
+            context.font = '800 200px "Montserrat", "Arial Black", "Helvetica Neue", Arial, sans-serif';
+            context.textAlign = 'center';
+            context.textBaseline = 'middle';
+            context.imageSmoothingEnabled = true;
+            context.imageSmoothingQuality = 'high';
+            
+            // Reset shadows
+            context.shadowColor = 'transparent';
+            context.shadowBlur = 0;
+            context.shadowOffsetX = 0;
+            context.shadowOffsetY = 0;
+            
+            // Draw text
+            const textStartY = imgY + imageHeight + imageSpacing + (lineHeight / 2);
+            lines.forEach((line, index) => {
+                const y = textStartY + (index * lineHeight);
+                context.fillText(line.trim(), canvas.width / 2, y);
+            });
+            
+            // Create 3D object from composite canvas
+            this.createMeshFromCanvas(canvas);
+        }
+
+        // Keyframe and Animation System
+        setKeyframe(type) {
+            const currentKeyframe = {
+                rotation: { ...this.rotation },
+                distance: this.distance
+            };
+
+            this.keyframes[type] = currentKeyframe;
+
+            if (type === 'start') {
+                this.setStartBtn.classList.add('set');
+                this.setStartBtn.textContent = '✓ Start';
+                this.setEndBtn.disabled = false;
+                this.keyframeStatus.textContent = 'Start keyframe set! Now position camera for end keyframe';
+            } else if (type === 'end') {
+                this.setEndBtn.classList.add('set');
+                this.setEndBtn.textContent = '✓ End';
+                this.playBtn.disabled = false;
+                this.renderBtn.disabled = false;
+                this.keyframeStatus.textContent = 'Both keyframes set! Ready to play or render animation';
             }
 
-            // Keyframe and Animation System
-            setKeyframe(type) {
-                const currentKeyframe = {
-                    rotation: { ...this.rotation },
-                    distance: this.distance
-                };
+            console.log(`${type} keyframe set:`, currentKeyframe);
+        }
 
-                this.keyframes[type] = currentKeyframe;
-
-                if (type === 'start') {
-                    this.setStartBtn.classList.add('set');
-                    this.setStartBtn.textContent = '✓ Start';
-                    this.setEndBtn.disabled = false;
-                    this.keyframeStatus.textContent = 'Start keyframe set! Now position camera for end keyframe';
-                } else if (type === 'end') {
-                    this.setEndBtn.classList.add('set');
-                    this.setEndBtn.textContent = '✓ End';
-                    this.playBtn.disabled = false;
-                    this.renderBtn.disabled = false;
-                    this.keyframeStatus.textContent = 'Both keyframes set! Ready to play or render animation';
-                }
-
-                console.log(`${type} keyframe set:`, currentKeyframe);
+        playAnimation() {
+            if (!this.keyframes.start || !this.keyframes.end) {
+                return;
             }
 
-            playAnimation() {
-                if (!this.keyframes.start || !this.keyframes.end) {
+            this.isAnimating = true;
+            this.animationStartTime = performance.now();
+            
+            // Disable controls during animation
+            this.setStartBtn.disabled = true;
+            this.setEndBtn.disabled = true;
+            this.playBtn.disabled = true;
+            this.renderBtn.disabled = true;
+            this.playBtn.textContent = 'Playing...';
+            this.keyframeStatus.textContent = 'Animation playing (7 seconds)';
+
+            console.log('Animation started');
+        }
+
+        updateAnimation() {
+            if (!this.isAnimating) return;
+
+            const currentTime = performance.now();
+            const elapsed = currentTime - this.animationStartTime;
+            const progress = Math.min(elapsed / this.animationDuration, 1);
+
+            // Smooth easing function (ease-in-out)
+            const easeInOut = (t) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+            const easedProgress = easeInOut(progress);
+
+            // Interpolate between start and end keyframes
+            const start = this.keyframes.start;
+            const end = this.keyframes.end;
+
+            // Interpolate rotation
+            this.rotation.x = start.rotation.x + (end.rotation.x - start.rotation.x) * easedProgress;
+            this.rotation.y = start.rotation.y + (end.rotation.y - start.rotation.y) * easedProgress;
+            
+            // Interpolate distance
+            this.distance = start.distance + (end.distance - start.distance) * easedProgress;
+
+            // Update targets to match animation
+            this.targetRotation.x = this.rotation.x;
+            this.targetRotation.y = this.rotation.y;
+            this.targetDistance = this.distance;
+
+            // Check if animation is complete
+            if (progress >= 1) {
+                this.isAnimating = false;
+                
+                // Handle recording completion
+                if (this.isRecording) {
+                    this.stopRecording();
                     return;
                 }
-
-                this.isAnimating = true;
-                this.animationStartTime = performance.now();
-                
-                // Disable controls during animation
-                this.setStartBtn.disabled = true;
-                this.setEndBtn.disabled = true;
-                this.playBtn.disabled = true;
-                this.renderBtn.disabled = true;
-                this.playBtn.textContent = 'Playing...';
-                this.keyframeStatus.textContent = 'Animation playing (7 seconds)';
-
-                console.log('Animation started');
-            }
-
-            updateAnimation() {
-                if (!this.isAnimating) return;
-
-                const currentTime = performance.now();
-                const elapsed = currentTime - this.animationStartTime;
-                const progress = Math.min(elapsed / this.animationDuration, 1);
-
-                // Smooth easing function (ease-in-out)
-                const easeInOut = (t) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-                const easedProgress = easeInOut(progress);
-
-                // Interpolate between start and end keyframes
-                const start = this.keyframes.start;
-                const end = this.keyframes.end;
-
-                // Interpolate rotation
-                this.rotation.x = start.rotation.x + (end.rotation.x - start.rotation.x) * easedProgress;
-                this.rotation.y = start.rotation.y + (end.rotation.y - start.rotation.y) * easedProgress;
-                
-                // Interpolate distance
-                this.distance = start.distance + (end.distance - start.distance) * easedProgress;
-
-                // Update targets to match animation
-                this.targetRotation.x = this.rotation.x;
-                this.targetRotation.y = this.rotation.y;
-                this.targetDistance = this.distance;
-
-                // Check if animation is complete
-                if (progress >= 1) {
-                    this.isAnimating = false;
-                    
-                    // Handle recording completion
-                    if (this.isRecording) {
-                        this.stopRecording();
-                        return;
-                    }
-                    
-                    // Re-enable controls
-                    this.setStartBtn.disabled = false;
-                    this.setEndBtn.disabled = false;
-                    this.playBtn.disabled = false;
-                    this.renderBtn.disabled = false;
-                    this.playBtn.textContent = '▶ Play (7s)';
-                    this.keyframeStatus.textContent = 'Animation complete! Adjust camera or replay';
-                    
-                    console.log('Animation completed');
-                }
-            }
-
-            // Video Recording System
-            startRender() {
-                if (!this.keyframes.start || !this.keyframes.end) {
-                    return;
-                }
-
-                try {
-                    // Get canvas stream for recording
-                    const stream = this.renderer.domElement.captureStream(30); // 30 FPS
-                    
-                    // Configure MediaRecorder
-                    const options = {
-                        mimeType: 'video/webm;codecs=vp9',
-                        videoBitsPerSecond: 5000000 // 5 Mbps for high quality
-                    };
-                    
-                    // Fallback for browsers that don't support vp9
-                    if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-                        options.mimeType = 'video/webm';
-                    }
-                    
-                    this.mediaRecorder = new MediaRecorder(stream, options);
-                    this.recordedChunks = [];
-                    
-                    // Handle recorded data
-                    this.mediaRecorder.ondataavailable = (event) => {
-                        if (event.data.size > 0) {
-                            this.recordedChunks.push(event.data);
-                        }
-                    };
-                    
-                    // Handle recording completion
-                    this.mediaRecorder.onstop = () => {
-                        this.processRecording();
-                    };
-                    
-                    // Start recording
-                    this.mediaRecorder.start();
-                    this.isRecording = true;
-                    
-                    // Update UI
-                    this.setStartBtn.disabled = true;
-                    this.setEndBtn.disabled = true;
-                    this.playBtn.disabled = true;
-                    this.renderBtn.disabled = true;
-                    this.renderBtn.textContent = '🔴 Recording...';
-                    this.keyframeStatus.textContent = 'Recording MP4... (7 seconds)';
-                    
-                    // Start animation for recording
-                    this.playAnimation();
-                    
-                } catch (error) {
-                    console.error('Recording failed:', error);
-                    this.keyframeStatus.textContent = 'Recording failed. Try again.';
-                    this.isRecording = false;
-                }
-            }
-
-            stopRecording() {
-                if (this.mediaRecorder && this.isRecording) {
-                    this.mediaRecorder.stop();
-                    this.isRecording = false;
-                }
-            }
-
-            processRecording() {
-                // Create blob from recorded chunks
-                const blob = new Blob(this.recordedChunks, { type: 'video/webm' });
-                this.currentVideoBlob = blob;
-                
-                // Create video URL and show in modal
-                const videoURL = URL.createObjectURL(blob);
-                this.renderedVideo.src = videoURL;
-                
-                // Show video modal
-                this.showVideoModal();
-                
-                // Clean up recorded chunks
-                this.recordedChunks = [];
                 
                 // Re-enable controls
                 this.setStartBtn.disabled = false;
                 this.setEndBtn.disabled = false;
                 this.playBtn.disabled = false;
                 this.renderBtn.disabled = false;
-                this.renderBtn.textContent = '🎥 Render Video';
-                this.keyframeStatus.textContent = 'Video ready! Long-press to save to camera roll';
+                this.playBtn.textContent = '▶ Play (7s)';
+                this.keyframeStatus.textContent = 'Animation complete! Adjust camera or replay';
                 
-                console.log('Recording processed and ready for viewing');
+                console.log('Animation completed');
+            }
+        }
+
+        // Video Recording System
+        startRender() {
+            if (!this.keyframes.start || !this.keyframes.end) {
+                return;
             }
 
-            // Video Modal Management
-            showVideoModal() {
-                this.videoModal.classList.add('show');
-                // Auto-play the video
-                setTimeout(() => {
-                    this.renderedVideo.play().catch(e => console.log('Autoplay prevented:', e));
-                }, 100);
-            }
-
-            closeVideoModal() {
-                this.videoModal.classList.remove('show');
-                // Clean up video URL to free memory
-                if (this.renderedVideo.src) {
-                    URL.revokeObjectURL(this.renderedVideo.src);
-                    this.renderedVideo.src = '';
-                }
-            }
-
-            downloadVideo() {
-                if (this.currentVideoBlob) {
-                    // Create download link as fallback
-                    const url = URL.createObjectURL(this.currentVideoBlob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `3d-text-animation-${Date.now()}.webm`;
-                    
-                    // Trigger download
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    
-                    // Clean up
-                    URL.revokeObjectURL(url);
-                    
-                    console.log('Video downloaded as fallback');
-                }
-            }
-
-            createBackgroundPlane() {
-                // Create a new image element to get dimensions
-                const img = new Image();
-                img.onload = () => {
-                    // Calculate aspect ratio from the actual image
-                    const aspectRatio = img.width / img.height;
-                    
-                    // Set a larger height and calculate width based on aspect ratio
-                    const planeHeight = 20; // Much larger scale
-                    const planeWidth = planeHeight * aspectRatio;
-                    
-                    // Create geometry with correct aspect ratio
-                    const geometry = new THREE.PlaneGeometry(planeWidth, planeHeight);
-                    
-                    // Create a large plane for the background image
-                    const loader = new THREE.TextureLoader();
-                    
-                    // Load the background image with high quality settings
-                    const texture = loader.load(this.backgroundImage, (loadedTexture) => {
-                        // Apply high-quality texture settings
-                        loadedTexture.minFilter = THREE.LinearFilter;
-                        loadedTexture.magFilter = THREE.LinearFilter;
-                        loadedTexture.format = THREE.RGBFormat;
-                        loadedTexture.generateMipmaps = false; // Disable for maximum sharpness
-                        loadedTexture.wrapS = THREE.ClampToEdgeWrap;
-                        loadedTexture.wrapT = THREE.ClampToEdgeWrap;
-                    });
-                    
-                    // Create material
-                    const material = new THREE.MeshBasicMaterial({
-                        map: texture,
-                        transparent: false
-                    });
-                    
-                    // Create the mesh
-                    this.backgroundMesh = new THREE.Mesh(geometry, material);
-                    
-                    // Position it closer behind the text (reduced Z distance)
-                    this.backgroundMesh.position.z = -1.5;
-                    
-                    this.scene.add(this.backgroundMesh);
+            try {
+                // Get canvas stream for recording
+                const stream = this.renderer.domElement.captureStream(30); // 30 FPS
+                
+                // Configure MediaRecorder
+                const options = {
+                    mimeType: 'video/webm;codecs=vp9',
+                    videoBitsPerSecond: 5000000 // 5 Mbps for high quality
                 };
                 
-                // Set the image source to trigger the onload
-                img.src = this.backgroundImage;
-            }
-
-            setupLighting() {
-                // Ambient light
-                const ambientLight = new THREE.AmbientLight(0x404040, 0.3);
-                this.scene.add(ambientLight);
-
-                // Main directional light
-                const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-                directionalLight.position.set(5, 5, 5);
-                directionalLight.castShadow = true;
-                directionalLight.shadow.mapSize.width = 2048;
-                directionalLight.shadow.mapSize.height = 2048;
-                this.scene.add(directionalLight);
-
-                // Fill light
-                const fillLight = new THREE.DirectionalLight(0x4a90e2, 0.3);
-                fillLight.position.set(-5, 0, 2);
-                this.scene.add(fillLight);
-
-                // Rim light
-                const rimLight = new THREE.DirectionalLight(0xffffff, 0.5);
-                rimLight.position.set(0, 5, -5);
-                this.scene.add(rimLight);
-            }
-
-            animate() {
-                if (!this.renderer) return;
-                
-                requestAnimationFrame(() => this.animate());
-
-                // Update animation if playing
-                this.updateAnimation();
-
-                // Only apply smooth camera movement if not animating
-                if (!this.isAnimating) {
-                    // Smooth camera movement
-                    this.rotation.x += (this.targetRotation.x - this.rotation.x) * 0.1;
-                    this.rotation.y += (this.targetRotation.y - this.rotation.y) * 0.1;
-                    this.distance += (this.targetDistance - this.distance) * 0.1;
+                // Fallback for browsers that don't support vp9
+                if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+                    options.mimeType = 'video/webm';
                 }
-
-                // Update camera position based on rotation and distance
-                this.camera.position.x = Math.sin(this.rotation.y) * Math.cos(this.rotation.x) * this.distance;
-                this.camera.position.y = Math.sin(this.rotation.x) * this.distance;
-                this.camera.position.z = Math.cos(this.rotation.y) * Math.cos(this.rotation.x) * this.distance;
                 
-                this.camera.lookAt(0, 0, 0);
-
-                this.renderer.render(this.scene, this.camera);
-            }
-
-            onWindowResize() {
-                if (!this.camera || !this.renderer) return;
+                this.mediaRecorder = new MediaRecorder(stream, options);
+                this.recordedChunks = [];
                 
-                this.camera.aspect = window.innerWidth / window.innerHeight;
-                this.camera.updateProjectionMatrix();
-                this.renderer.setSize(window.innerWidth, window.innerHeight);
-                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 3)); // Maintain high pixel ratio on resize
+                // Handle recorded data
+                this.mediaRecorder.ondataavailable = (event) => {
+                    if (event.data.size > 0) {
+                        this.recordedChunks.push(event.data);
+                    }
+                };
+                
+                // Handle recording completion
+                this.mediaRecorder.onstop = () => {
+                    this.processRecording();
+                };
+                
+                // Start recording
+                this.mediaRecorder.start();
+                this.isRecording = true;
+                
+                // Update UI
+                this.setStartBtn.disabled = true;
+                this.setEndBtn.disabled = true;
+                this.playBtn.disabled = true;
+                this.renderBtn.disabled = true;
+                this.renderBtn.textContent = '🔴 Recording...';
+                this.keyframeStatus.textContent = 'Recording MP4... (7 seconds)';
+                
+                // Start animation for recording
+                this.playAnimation();
+                
+            } catch (error) {
+                console.error('Recording failed:', error);
+                this.keyframeStatus.textContent = 'Recording failed. Try again.';
+                this.isRecording = false;
             }
         }
 
-        // Initialize the app when DOM is loaded
-        document.addEventListener('DOMContentLoaded', () => {
-            new TextGenerator3D();
+        stopRecording() {
+            if (this.mediaRecorder && this.isRecording) {
+                this.mediaRecorder.stop();
+                this.isRecording = false;
+            }
+        }
+
+        processRecording() {
+            // Create blob from recorded chunks
+            const blob = new Blob(this.recordedChunks, { type: 'video/webm' });
+            this.currentVideoBlob = blob;
+            
+            // Create video URL and show in modal
+            const videoURL = URL.createObjectURL(blob);
+            this.renderedVideo.src = videoURL;
+            
+            // Show video modal
+            this.showVideoModal();
+            
+            // Clean up recorded chunks
+            this.recordedChunks = [];
+            
+            // Re-enable controls
+            this.setStartBtn.disabled = false;
+            this.setEndBtn.disabled = false;
+            this.playBtn.disabled = false;
+            this.renderBtn.disabled = false;
+            this.renderBtn.textContent = '🎥 Render Video';
+            this.keyframeStatus.textContent = 'Video ready! Long-press to save to camera roll';
+            
+            console.log('Recording processed and ready for viewing');
+        }
+
+        // Video Modal Management
+        showVideoModal() {
+            this.videoModal.classList.add('show');
+            // Auto-play the video
+            setTimeout(() => {
+                this.renderedVideo.play().catch(e => console.log('Autoplay prevented:', e));
+            }, 100);
+        }
+
+        closeVideoModal() {
+            this.videoModal.classList.remove('show');
+            // Clean up video URL to free memory
+            if (this.renderedVideo.src) {
+                URL.revokeObjectURL(this.renderedVideo.src);
+                this.renderedVideo.src = '';
+            }
+        }
+
+        downloadVideo() {
+            if (this.currentVideoBlob) {
+                // Create download link as fallback
+                const url = URL.createObjectURL(this.currentVideoBlob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `3d-text-animation-${Date.now()}.webm`;
+                
+                // Trigger download
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                
+                // Clean up
+                URL.revokeObjectURL(url);
+                
+                console.log('Video downloaded as fallback');
+            }
+        }
+
+        createBackgroundPlane() {
+            // Create a new image element to get dimensions
+            const img = new Image();
+            img.onload = () => {
+                // Calculate aspect ratio from the actual image
+                const aspectRatio = img.width / img.height;
+                
+                // Set a larger height and calculate width based on aspect ratio
+                const planeHeight = 20; // Much larger scale
+                const planeWidth = planeHeight * aspectRatio;
+                
+                // Create geometry with correct aspect ratio
+                const geometry = new THREE.PlaneGeometry(planeWidth, planeHeight);
+                
+                // Create a large plane for the background image
+                const loader = new THREE.TextureLoader();
+                
+                // Load the background image with high quality settings
+                const texture = loader.load(this.backgroundImage, (loadedTexture) => {
+                    // Apply high-quality texture settings
+                    loadedTexture.minFilter = THREE.LinearFilter;
+                    loadedTexture.magFilter = THREE.LinearFilter;
+                    loadedTexture.format = THREE.RGBFormat;
+                    loadedTexture.generateMipmaps = false; // Disable for maximum sharpness
+                    loadedTexture.wrapS = THREE.ClampToEdgeWrap;
+                    loadedTexture.wrapT = THREE.ClampToEdgeWrap;
+                });
+                
+                // Create material
+                const material = new THREE.MeshBasicMaterial({
+                    map: texture,
+                    transparent: false
+                });
+                
+                // Create the mesh
+                this.backgroundMesh = new THREE.Mesh(geometry, material);
+                
+                // Position it closer behind the text (reduced Z distance)
+                this.backgroundMesh.position.z = -1.5;
+                
+                this.scene.add(this.backgroundMesh);
+            };
+            
+            // Set the image source to trigger the onload
+            img.src = this.backgroundImage;
+        }
+
+        setupLighting() {
+            // Ambient light
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.3);
+            this.scene.add(ambientLight);
+
+            // Main directional light
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(5, 5, 5);
+            directionalLight.castShadow = true;
+            directionalLight.shadow.mapSize.width = 2048;
+            directionalLight.shadow.mapSize.height = 2048;
+            this.scene.add(directionalLight);
+
+            // Fill light
+            const fillLight = new THREE.DirectionalLight(0x4a90e2, 0.3);
+            fillLight.position.set(-5, 0, 2);
+            this.scene.add(fillLight);
+
+            // Rim light
+            const rimLight = new THREE.DirectionalLight(0xffffff, 0.5);
+            rimLight.position.set(0, 5, -5);
+            this.scene.add(rimLight);
+        }
+
+        animate() {
+            if (!this.renderer) return;
+            
+            requestAnimationFrame(() => this.animate());
+
+            // Update animation if playing
+            this.updateAnimation();
+
+            // Only apply smooth camera movement if not animating
+            if (!this.isAnimating) {
+                // Smooth camera movement
+                this.rotation.x += (this.targetRotation.x - this.rotation.x) * 0.1;
+                this.rotation.y += (this.targetRotation.y - this.rotation.y) * 0.1;
+                this.distance += (this.targetDistance - this.distance) * 0.1;
+            }
+
+            // Update camera position based on rotation and distance
+            this.camera.position.x = Math.sin(this.rotation.y) * Math.cos(this.rotation.x) * this.distance;
+            this.camera.position.y = Math.sin(this.rotation.x) * this.distance;
+            this.camera.position.z = Math.cos(this.rotation.y) * Math.cos(this.rotation.x) * this.distance;
+            
+            this.camera.lookAt(0, 0, 0);
+
+            this.renderer.render(this.scene, this.camera);
+        }
+
+        onWindowResize() {
+            if (!this.camera || !this.renderer) return;
+            
+            this.camera.aspect = window.innerWidth / window.innerHeight;
+            this.camera.updateProjectionMatrix();
+            this.renderer.setSize(window.innerWidth, window.innerHeight);
+            this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 3)); // Maintain high pixel ratio on resize
+        }
+    }
+
+    // Initialize the app when DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        new TextGenerator3D();
+    });
+
+    // Service Worker for PWA functionality
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            const swCode = `
+                const CACHE_NAME = '3d-text-generator-v1';
+                const urlsToCache = ['/'];
+                
+                self.addEventListener('install', event => {
+                    event.waitUntil(
+                        caches.open(CACHE_NAME)
+                            .then(cache => cache.addAll(urlsToCache))
+                    );
+                });
+                
+                self.addEventListener('fetch', event => {
+                    event.respondWith(
+                        caches.match(event.request)
+                            .then(response => response || fetch(event.request))
+                    );
+                });
+            `;
+            
+            const blob = new Blob([swCode], { type: 'application/javascript' });
+            const swUrl = URL.createObjectURL(blob);
+            
+            navigator.serviceWorker.register(swUrl)
+                .then(() => console.log('SW registered'))
+                .catch(() => console.log('SW registration failed'));
         });
+    }
+</script>
+```
 
-        // Service Worker for PWA functionality
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                const swCode = `
-                    const CACHE_NAME = '3d-text-generator-v1';
-                    const urlsToCache = ['/'];
-                    
-                    self.addEventListener('install', event => {
-                        event.waitUntil(
-                            caches.open(CACHE_NAME)
-                                .then(cache => cache.addAll(urlsToCache))
-                        );
-                    });
-                    
-                    self.addEventListener('fetch', event => {
-                        event.respondWith(
-                            caches.match(event.request)
-                                .then(response => response || fetch(event.request))
-                        );
-                    });
-                `;
-                
-                const blob = new Blob([swCode], { type: 'application/javascript' });
-                const swUrl = URL.createObjectURL(blob);
-                
-                navigator.serviceWorker.register(swUrl)
-                    .then(() => console.log('SW registered'))
-                    .catch(() => console.log('SW registration failed'));
-            });
-        }
-    </script>
 </body>
 </html>
