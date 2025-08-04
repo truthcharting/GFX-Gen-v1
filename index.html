@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -14,265 +13,342 @@
             box-sizing: border-box;
         }
 
-```
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: #000;
-        color: #fff;
-        overflow: hidden;
-        height: 100vh;
-        width: 100vw;
-        position: fixed;
-        -webkit-overflow-scrolling: touch;
-        user-select: none;
-        -webkit-user-select: none;
-        -webkit-touch-callout: none;
-        -webkit-text-size-adjust: 100%;
-    }
-
-    .screen {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
-        overflow: hidden;
-    }
-
-    .screen.hidden {
-        transform: translateX(-100%);
-        opacity: 0;
-        pointer-events: none;
-    }
-
-    /* Input Screen */
-    .input-screen {
-        flex-direction: column;
-        background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-    }
-
-    .container {
-        max-width: 500px;
-        width: 90%;
-        text-align: center;
-    }
-
-    .title {
-        font-size: 2.5em;
-        font-weight: 300;
-        margin-bottom: 0.5em;
-        background: linear-gradient(45deg, #fff, #888);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
-
-    .subtitle {
-        font-size: 1.1em;
-        color: #888;
-        margin-bottom: 2em;
-        font-weight: 300;
-    }
-
-    .input-group {
-        margin-bottom: 2em;
-    }
-
-    .text-input {
-        width: 100%;
-        padding: 1em;
-        background: #111;
-        border: 2px solid #333;
-        border-radius: 12px;
-        color: #fff;
-        font-size: 1.1em;
-        font-family: inherit;
-        resize: none;
-        min-height: 120px;
-        transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        touch-action: manipulation;
-        user-select: text;
-        -webkit-user-select: text;
-    }
-
-    .text-input:focus {
-        outline: none;
-        border-color: #4a90e2;
-        box-shadow: 0 0 20px rgba(74, 144, 226, 0.3);
-    }
-
-    .text-input::placeholder {
-        color: #555;
-    }
-
-    .next-button {
-        background: linear-gradient(45deg, #4a90e2, #357abd);
-        border: none;
-        padding: 1em 2em;
-        border-radius: 25px;
-        color: #fff;
-        font-size: 1.1em;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
-        touch-action: manipulation;
-    }
-
-    .next-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 25px rgba(74, 144, 226, 0.4);
-    }
-
-    .next-button:active {
-        transform: translateY(0);
-    }
-
-    .next-button:disabled {
-        background: #333;
-        color: #666;
-        cursor: not-allowed;
-        transform: none;
-        box-shadow: none;
-    }
-
-    /* File Upload Styling */
-    .file-label {
-        display: block;
-        width: 100%;
-        padding: 1em;
-        background: #111;
-        border: 2px dashed #333;
-        border-radius: 12px;
-        color: #888;
-        text-align: center;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        margin-top: 1em;
-        touch-action: manipulation;
-    }
-
-    .file-label:hover {
-        border-color: #4a90e2;
-        background: #151515;
-    }
-
-    .file-label.has-file {
-        border-color: #4a90e2;
-        background: rgba(74, 144, 226, 0.1);
-        color: #4a90e2;
-    }
-
-    .file-input {
-        display: none;
-    }
-
-    .file-label-text {
-        display: block;
-        font-size: 1em;
-    }
-
-    .file-preview {
-        margin-top: 10px;
-        text-align: center;
-    }
-
-    .file-preview img {
-        max-width: 200px;
-        max-height: 100px;
-        border-radius: 8px;
-        border: 1px solid #333;
-    }
-
-    .file-preview .file-name {
-        color: #4a90e2;
-        font-size: 0.9em;
-        margin-top: 5px;
-    }
-
-    /* 3D Screen */
-    .canvas-screen {
-        background: #000;
-        touch-action: none;
-    }
-
-    #canvas-container {
-        width: 100%;
-        height: 100%;
-        position: relative;
-        touch-action: none;
-        overflow: hidden;
-    }
-
-    .back-button {
-        position: absolute;
-        top: 20px;
-        left: 20px;
-        z-index: 100;
-        background: rgba(0, 0, 0, 0.7);
-        border: 1px solid #333;
-        color: #fff;
-        padding: 10px 20px;
-        border-radius: 20px;
-        cursor: pointer;
-        font-family: inherit;
-        transition: all 0.3s ease;
-        backdrop-filter: blur(10px);
-        touch-action: manipulation;
-    }
-
-    .back-button:hover {
-        background: rgba(74, 144, 226, 0.8);
-        border-color: #4a90e2;
-    }
-
-    .loading {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: #4a90e2;
-        font-size: 1.2em;
-        z-index: 50;
-    }
-
-    .controls {
-        position: absolute;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(0, 0, 0, 0.7);
-        padding: 15px 25px;
-        border-radius: 25px;
-        color: #fff;
-        font-size: 0.9em;
-        z-index: 100;
-        backdrop-filter: blur(10px);
-        border: 1px solid #333;
-    }
-
-    @media (max-width: 600px) {
-        .title {
-            font-size: 2em;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            position: fixed;
+            -webkit-overflow-scrolling: touch;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-text-size-adjust: 100%;
         }
-        
+
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
+            overflow: hidden;
+        }
+
+        .screen.hidden {
+            transform: translateX(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Input Screen */
+        .input-screen {
+            flex-direction: column;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+        }
+
         .container {
-            width: 95%;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
         }
-        
+
+        .title {
+            font-size: 2.5em;
+            font-weight: 300;
+            margin-bottom: 0.5em;
+            background: linear-gradient(45deg, #fff, #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            color: #888;
+            margin-bottom: 2em;
+            font-weight: 300;
+        }
+
+        .input-group {
+            margin-bottom: 2em;
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 1em;
+            background: #111;
+            border: 2px solid #333;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1.1em;
+            font-family: inherit;
+            resize: none;
+            min-height: 120px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            touch-action: manipulation;
+            user-select: text;
+            -webkit-user-select: text;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: #4a90e2;
+            box-shadow: 0 0 20px rgba(74, 144, 226, 0.3);
+        }
+
+        .text-input::placeholder {
+            color: #555;
+        }
+
+        .next-button {
+            background: linear-gradient(45deg, #4a90e2, #357abd);
+            border: none;
+            padding: 1em 2em;
+            border-radius: 25px;
+            color: #fff;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+            touch-action: manipulation;
+        }
+
+        .next-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(74, 144, 226, 0.4);
+        }
+
+        .next-button:active {
+            transform: translateY(0);
+        }
+
+        .next-button:disabled {
+            background: #333;
+            color: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* File Upload Styling */
+        .file-label {
+            display: block;
+            width: 100%;
+            padding: 1em;
+            background: #111;
+            border: 2px dashed #333;
+            border-radius: 12px;
+            color: #888;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1em;
+            touch-action: manipulation;
+        }
+
+        .file-label:hover {
+            border-color: #4a90e2;
+            background: #151515;
+        }
+
+        .file-label.has-file {
+            border-color: #4a90e2;
+            background: rgba(74, 144, 226, 0.1);
+            color: #4a90e2;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-label-text {
+            display: block;
+            font-size: 1em;
+        }
+
+        .file-preview {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .file-preview img {
+            max-width: 200px;
+            max-height: 100px;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+
+        .file-preview .file-name {
+            color: #4a90e2;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        /* 3D Screen */
+        .canvas-screen {
+            background: #000;
+            touch-action: none;
+        }
+
+        #canvas-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            touch-action: none;
+            overflow: hidden;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #333;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            touch-action: manipulation;
+        }
+
+        .back-button:hover {
+            background: rgba(74, 144, 226, 0.8);
+            border-color: #4a90e2;
+        }
+
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #4a90e2;
+            font-size: 1.2em;
+            z-index: 50;
+        }
+
         .controls {
-            bottom: 10px;
-            font-size: 0.8em;
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px 25px;
+            border-radius: 25px;
+            color: #fff;
+            font-size: 0.9em;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            border: 1px solid #333;
+        }
+
+        /* Animation Controls */
+        .animation-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px 20px;
+            border-radius: 20px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            z-index: 101;
+            backdrop-filter: blur(10px);
+            border: 1px solid #333;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .keyframe-btn, .play-btn {
+            background: linear-gradient(45deg, #4a90e2, #357abd);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 15px;
+            color: #fff;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            touch-action: manipulation;
+            min-width: 70px;
+        }
+
+        .keyframe-btn:hover, .play-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.4);
+        }
+
+        .keyframe-btn:disabled, .play-btn:disabled {
+            background: #333;
+            color: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .keyframe-btn.set {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+        }
+
+        .play-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            font-size: 1em;
             padding: 10px 20px;
         }
-    }
-</style>
-```
 
+        .keyframe-status {
+            color: #aaa;
+            font-size: 0.8em;
+            text-align: center;
+            width: 100%;
+            margin-top: 5px;
+        }
+
+            @media (max-width: 600px) {
+            .title {
+                font-size: 2em;
+            }
+            
+            .container {
+                width: 95%;
+            }
+            
+            .controls {
+                bottom: 130px;
+                font-size: 0.8em;
+                padding: 10px 20px;
+            }
+            
+            .animation-controls {
+                bottom: 10px;
+                padding: 10px 15px;
+                gap: 8px;
+            }
+            
+            .keyframe-btn, .play-btn {
+                font-size: 0.8em;
+                padding: 6px 12px;
+                min-width: 60px;
+            }
+            
+            .keyframe-status {
+                font-size: 0.7em;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Input Screen -->
@@ -280,584 +356,708 @@
         <div class="container">
             <h1 class="title">3D Text Generator</h1>
             <p class="subtitle">Transform your words into stunning 3D graphics</p>
+            
+            <div class="input-group">
+                <textarea 
+                    class="text-input" 
+                    id="textInput" 
+                    placeholder="Enter your text here...&#10;Try something creative!"
+                    maxlength="100"
+                ></textarea>
+            </div>
+            
+            <div class="input-group">
+                <label class="file-label" for="backgroundInput">
+                    <span class="file-label-text">Choose Background Image (Optional)</span>
+                    <input type="file" id="backgroundInput" class="file-input" accept="image/*">
+                </label>
+                <div class="file-preview" id="filePreview"></div>
+            </div>
+            
+            <button class="next-button" id="nextButton" disabled>
+                Generate 3D Text
+            </button>
+        </div>
+    </div>
 
-```
-        <div class="input-group">
-            <textarea 
-                class="text-input" 
-                id="textInput" 
-                placeholder="Enter your text here...&#10;Try something creative!"
-                maxlength="100"
-            ></textarea>
+    <!-- 3D Canvas Screen -->
+    <div class="screen canvas-screen hidden" id="canvasScreen">
+        <button class="back-button" id="backButton">← Back</button>
+        <div class="loading" id="loading">Loading 3D scene...</div>
+        <div id="canvas-container"></div>
+        <div class="controls">
+            Drag to rotate • Pinch to zoom • Double-tap to reset
         </div>
         
-        <div class="input-group">
-            <label class="file-label" for="backgroundInput">
-                <span class="file-label-text">Choose Background Image (Optional)</span>
-                <input type="file" id="backgroundInput" class="file-input" accept="image/*">
-            </label>
-            <div class="file-preview" id="filePreview"></div>
+        <!-- Animation Controls -->
+        <div class="animation-controls" id="animationControls">
+            <button class="keyframe-btn" id="setStartBtn">Set Start</button>
+            <button class="keyframe-btn" id="setEndBtn" disabled>Set End</button>
+            <button class="play-btn" id="playBtn" disabled>▶ Play (7s)</button>
+            <div class="keyframe-status" id="keyframeStatus">Position camera and set start keyframe</div>
         </div>
-        
-        <button class="next-button" id="nextButton" disabled>
-            Generate 3D Text
-        </button>
     </div>
-</div>
 
-<!-- 3D Canvas Screen -->
-<div class="screen canvas-screen hidden" id="canvasScreen">
-    <button class="back-button" id="backButton">← Back</button>
-    <div class="loading" id="loading">Loading 3D scene...</div>
-    <div id="canvas-container"></div>
-    <div class="controls">
-        Drag to rotate • Pinch to zoom • Double-tap to reset
-    </div>
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script>
-    class TextGenerator3D {
-        constructor() {
-            this.scene = null;
-            this.camera = null;
-            this.renderer = null;
-            this.textMesh = null;
-            this.backgroundMesh = null;
-            this.controls = null;
-            this.isMouseDown = false;
-            this.previousMousePosition = { x: 0, y: 0 };
-            this.rotation = { x: 0, y: 0 };
-            this.targetRotation = { x: 0, y: 0 };
-            this.distance = 5;
-            this.targetDistance = 5;
-            this.backgroundImage = null;
-            
-            this.initializeElements();
-            this.setupEventListeners();
-        }
-
-        initializeElements() {
-            this.inputScreen = document.getElementById('inputScreen');
-            this.canvasScreen = document.getElementById('canvasScreen');
-            this.textInput = document.getElementById('textInput');
-            this.backgroundInput = document.getElementById('backgroundInput');
-            this.filePreview = document.getElementById('filePreview');
-            this.nextButton = document.getElementById('nextButton');
-            this.backButton = document.getElementById('backButton');
-            this.loading = document.getElementById('loading');
-            this.canvasContainer = document.getElementById('canvas-container');
-        }
-
-        setupEventListeners() {
-            this.textInput.addEventListener('input', () => {
-                const hasText = this.textInput.value.trim().length > 0;
-                this.nextButton.disabled = !hasText;
-            });
-
-            this.backgroundInput.addEventListener('change', (e) => {
-                this.handleFileUpload(e);
-            });
-
-            this.nextButton.addEventListener('click', () => {
-                this.showCanvasScreen();
-            });
-
-            this.backButton.addEventListener('click', () => {
-                this.showInputScreen();
-            });
-
-            // Touch and mouse events for orbit controls
-            this.setupOrbitControls();
-        }
-
-        handleFileUpload(event) {
-            const file = event.target.files[0];
-            const fileLabel = document.querySelector('.file-label');
-            
-            if (file && file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    this.backgroundImage = e.target.result;
-                    
-                    // Update UI
-                    fileLabel.classList.add('has-file');
-                    fileLabel.querySelector('.file-label-text').textContent = 'Background Selected ✓';
-                    
-                    // Show preview
-                    this.filePreview.innerHTML = `
-                        <img src="${this.backgroundImage}" alt="Background preview">
-                        <div class="file-name">${file.name}</div>
-                    `;
-                };
-                reader.readAsDataURL(file);
-            } else {
-                // Reset if invalid file
-                this.backgroundImage = null;
-                fileLabel.classList.remove('has-file');
-                fileLabel.querySelector('.file-label-text').textContent = 'Choose Background Image (Optional)';
-                this.filePreview.innerHTML = '';
-            }
-        }
-
-        setupOrbitControls() {
-            let lastTouchDistance = 0;
-            
-            // Only prevent default touch behaviors on the 3D canvas area
-            const canvas3D = () => this.canvasContainer;
-            
-            // Prevent context menu on long press
-            document.addEventListener('contextmenu', (e) => {
-                e.preventDefault();
-            });
-            
-            // Prevent zoom gestures only
-            document.addEventListener('gesturestart', (e) => {
-                e.preventDefault();
-            });
-            
-            document.addEventListener('gesturechange', (e) => {
-                e.preventDefault();
-            });
-            
-            document.addEventListener('gestureend', (e) => {
-                e.preventDefault();
-            });
-            
-            // Mouse events
-            document.addEventListener('mousedown', (e) => {
-                if (this.canvasScreen.classList.contains('hidden')) return;
-                
-                // Only handle mouse events on the canvas area
-                if (canvas3D() && canvas3D().contains(e.target)) {
-                    this.isMouseDown = true;
-                    this.previousMousePosition = { x: e.clientX, y: e.clientY };
-                    e.preventDefault();
-                }
-            });
-
-            document.addEventListener('mousemove', (e) => {
-                if (!this.isMouseDown || this.canvasScreen.classList.contains('hidden')) return;
-                this.handleRotation(e.clientX, e.clientY);
-                e.preventDefault();
-            });
-
-            document.addEventListener('mouseup', (e) => {
-                this.isMouseDown = false;
-            });
-
-            // Touch events for 3D controls - only on canvas area
-            document.addEventListener('touchstart', (e) => {
-                if (this.canvasScreen.classList.contains('hidden')) return;
-                
-                // Only handle touch events on the canvas area
-                if (canvas3D() && canvas3D().contains(e.target)) {
-                    if (e.touches.length === 1) {
-                        this.isMouseDown = true;
-                        this.previousMousePosition = { 
-                            x: e.touches[0].clientX, 
-                            y: e.touches[0].clientY 
-                        };
-                    } else if (e.touches.length === 2) {
-                        this.isMouseDown = false;
-                        const dx = e.touches[0].clientX - e.touches[1].clientX;
-                        const dy = e.touches[0].clientY - e.touches[1].clientY;
-                        lastTouchDistance = Math.sqrt(dx * dx + dy * dy);
-                    }
-                    e.preventDefault();
-                }
-            }, { passive: false });
-
-            document.addEventListener('touchmove', (e) => {
-                if (this.canvasScreen.classList.contains('hidden')) return;
-                
-                // Only handle touch events on the canvas area or if we're already dragging
-                if ((canvas3D() && canvas3D().contains(e.target)) || this.isMouseDown) {
-                    if (e.touches.length === 1 && this.isMouseDown) {
-                        this.handleRotation(e.touches[0].clientX, e.touches[0].clientY);
-                    } else if (e.touches.length === 2) {
-                        const dx = e.touches[0].clientX - e.touches[1].clientX;
-                        const dy = e.touches[0].clientY - e.touches[1].clientY;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
-                        
-                        if (lastTouchDistance > 0) {
-                            // More stable zoom calculation
-                            const scale = distance / lastTouchDistance;
-                            const zoomFactor = (scale - 1) * 2; // Adjust sensitivity
-                            this.targetDistance = Math.max(2, Math.min(15, this.targetDistance - zoomFactor));
-                        }
-                        lastTouchDistance = distance;
-                    }
-                    e.preventDefault();
-                }
-            }, { passive: false });
-
-            document.addEventListener('touchend', (e) => {
-                if (this.canvasScreen.classList.contains('hidden')) return;
-                
-                this.isMouseDown = false;
-                // Only reset lastTouchDistance when all touches are gone
-                if (e.touches.length === 0) {
-                    lastTouchDistance = 0;
-                } else if (e.touches.length === 1) {
-                    // If we go from 2 touches to 1, stop zooming but don't reset distance
-                    lastTouchDistance = 0;
-                }
-            });
-
-            // Mouse wheel for zoom
-            document.addEventListener('wheel', (e) => {
-                if (this.canvasScreen.classList.contains('hidden')) return;
-                
-                // Only handle wheel events on the canvas area
-                if (canvas3D() && canvas3D().contains(e.target)) {
-                    const delta = e.deltaY * 0.01;
-                    this.targetDistance = Math.max(2, Math.min(15, this.targetDistance + delta));
-                    e.preventDefault();
-                }
-            }, { passive: false });
-
-            // Double tap to reset - only on canvas area
-            let lastTap = 0;
-            document.addEventListener('touchend', (e) => {
-                if (this.canvasScreen.classList.contains('hidden')) return;
-                
-                if (canvas3D() && canvas3D().contains(e.target) && e.touches.length === 0) {
-                    const currentTime = new Date().getTime();
-                    const tapLength = currentTime - lastTap;
-                    if (tapLength < 500 && tapLength > 0) {
-                        console.log('Double tap detected - resetting camera'); // Debug log
-                        this.resetCamera();
-                    }
-                    lastTap = currentTime;
-                }
-            });
-        }
-
-        handleRotation(clientX, clientY) {
-            const deltaMove = {
-                x: clientX - this.previousMousePosition.x,
-                y: clientY - this.previousMousePosition.y
-            };
-
-            this.targetRotation.y -= deltaMove.x * 0.01; // Inverted horizontal movement
-            this.targetRotation.x += deltaMove.y * 0.01;
-            
-            // Clamp vertical rotation
-            this.targetRotation.x = Math.max(-Math.PI/2, Math.min(Math.PI/2, this.targetRotation.x));
-
-            this.previousMousePosition = { x: clientX, y: clientY };
-        }
-
-        resetCamera() {
-            console.log('Camera reset triggered'); // Debug log
-            this.targetRotation = { x: 0, y: 0 };
-            this.targetDistance = 5;
-        }
-
-        showCanvasScreen() {
-            this.inputScreen.classList.add('hidden');
-            this.canvasScreen.classList.remove('hidden');
-            this.loading.style.display = 'block';
-            
-            setTimeout(() => {
-                this.init3DScene();
-            }, 100);
-        }
-
-        showInputScreen() {
-            this.canvasScreen.classList.add('hidden');
-            this.inputScreen.classList.remove('hidden');
-            
-            if (this.renderer) {
-                this.canvasContainer.removeChild(this.renderer.domElement);
-                this.renderer.dispose();
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        class TextGenerator3D {
+            constructor() {
+                this.scene = null;
+                this.camera = null;
                 this.renderer = null;
-            }
-            
-            // Clean up meshes
-            if (this.textMesh) {
-                this.scene.remove(this.textMesh);
                 this.textMesh = null;
-            }
-            if (this.backgroundMesh) {
-                this.scene.remove(this.backgroundMesh);
                 this.backgroundMesh = null;
-            }
-        }
-
-        init3DScene() {
-            const text = this.textInput.value.trim();
-            
-            // Scene setup
-            this.scene = new THREE.Scene();
-            
-            // Camera setup
-            this.camera = new THREE.PerspectiveCamera(
-                75, 
-                window.innerWidth / window.innerHeight, 
-                0.1, 
-                1000
-            );
-            
-            // Renderer setup with maximum quality settings
-            this.renderer = new THREE.WebGLRenderer({ 
-                antialias: true,
-                alpha: true,
-                powerPreference: "high-performance",
-                precision: "highp"
-            });
-            this.renderer.setSize(window.innerWidth, window.innerHeight);
-            this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 3)); // Support up to 3x pixel density
-            this.renderer.setClearColor(0x000000);
-            this.renderer.shadowMap.enabled = true;
-            this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-            this.renderer.outputEncoding = THREE.sRGBEncoding;
-            this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-            this.renderer.toneMappingExposure = 1.0;
-            
-            this.canvasContainer.appendChild(this.renderer.domElement);
-
-            // Create background first (behind text)
-            if (this.backgroundImage) {
-                this.createBackgroundPlane();
+                this.controls = null;
+                this.isMouseDown = false;
+                this.previousMousePosition = { x: 0, y: 0 };
+                this.rotation = { x: 0, y: 0 };
+                this.targetRotation = { x: 0, y: 0 };
+                this.distance = 5;
+                this.targetDistance = 5;
+                this.backgroundImage = null;
+                
+                // Animation system
+                this.isAnimating = false;
+                this.animationStartTime = 0;
+                this.animationDuration = 7000; // 7 seconds
+                this.keyframes = {
+                    start: null,
+                    end: null
+                };
+                
+                this.initializeElements();
+                this.setupEventListeners();
             }
 
-            // Create 3D text (in front)
-            this.create3DText(text);
-            
-            // Lighting
-            this.setupLighting();
-            
-            // Start animation
-            this.animate();
-            
-            // Hide loading
-            this.loading.style.display = 'none';
-            
-            // Handle resize
-            window.addEventListener('resize', () => this.onWindowResize());
-        }
+            initializeElements() {
+                this.inputScreen = document.getElementById('inputScreen');
+                this.canvasScreen = document.getElementById('canvasScreen');
+                this.textInput = document.getElementById('textInput');
+                this.backgroundInput = document.getElementById('backgroundInput');
+                this.filePreview = document.getElementById('filePreview');
+                this.nextButton = document.getElementById('nextButton');
+                this.backButton = document.getElementById('backButton');
+                this.loading = document.getElementById('loading');
+                this.canvasContainer = document.getElementById('canvas-container');
+                
+                // Animation controls
+                this.animationControls = document.getElementById('animationControls');
+                this.setStartBtn = document.getElementById('setStartBtn');
+                this.setEndBtn = document.getElementById('setEndBtn');
+                this.playBtn = document.getElementById('playBtn');
+                this.keyframeStatus = document.getElementById('keyframeStatus');
+            }
 
-        create3DText(text) {
-            // Use canvas-based 3D text as the primary method for reliability
-            this.createCanvasText(text);
-        }
-        
-        createCanvasText(text) {
-            // Split text into lines and handle multi-line rendering
-            const lines = text.split('\n').filter(line => line.trim().length > 0); // Remove empty lines
-            
-            // Create high-quality text using canvas with WebGL-safe dimensions
-            const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
-            
-            // Calculate canvas size based on number of lines
-            const lineHeight = 220; // Space between lines
-            const padding = 100; // Top and bottom padding
-            canvas.width = 4096;
-            canvas.height = Math.max(1024, (lines.length * lineHeight) + (padding * 2));
-            
-            // Clear background to transparent
-            context.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // Style the text with high quality settings
-            context.fillStyle = '#ffffff';
-            context.font = 'bold 200px system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
-            context.textAlign = 'center';
-            context.textBaseline = 'middle';
-            context.imageSmoothingEnabled = true;
-            context.imageSmoothingQuality = 'high';
-            
-            // Add text shadow for depth effect
-            context.shadowColor = '#888888';
-            context.shadowBlur = 12;
-            context.shadowOffsetX = 6;
-            context.shadowOffsetY = 6;
-            
-            // Draw each line of text
-            const startY = padding + (lineHeight / 2);
-            lines.forEach((line, index) => {
-                const y = startY + (index * lineHeight);
-                context.fillText(line.trim(), canvas.width / 2, y);
-            });
-            
-            // Create texture from canvas with highest quality settings
-            const texture = new THREE.CanvasTexture(canvas);
-            texture.needsUpdate = true;
-            texture.minFilter = THREE.LinearFilter;
-            texture.magFilter = THREE.LinearFilter;
-            texture.format = THREE.RGBAFormat;
-            texture.generateMipmaps = false; // Disable mipmaps for sharpest quality
-            texture.wrapS = THREE.ClampToEdgeWrap;
-            texture.wrapT = THREE.ClampToEdgeWrap;
-            
-            // Keep geometry consistent - don't stretch based on line count
-            const geometry = new THREE.BoxGeometry(6, 1.5, 0.4);
-            
-            // Create materials array - text only on front face, transparent elsewhere
-            const materials = [
-                new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 }), // Right side - invisible
-                new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 }), // Left side - invisible  
-                new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 }), // Top - invisible
-                new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 }), // Bottom - invisible
-                new THREE.MeshBasicMaterial({ // Front face - visible with text
-                    map: texture,
-                    transparent: true,
-                    alphaTest: 0.1
-                }),
-                new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 }) // Back - invisible
-            ];
-            
-            // Create the mesh
-            this.textMesh = new THREE.Mesh(geometry, materials);
-            this.textMesh.castShadow = false;
-            this.textMesh.receiveShadow = false;
-            
-            this.scene.add(this.textMesh);
-            
-            // Hide loading indicator
-            this.loading.style.display = 'none';
-        }
+            setupEventListeners() {
+                this.textInput.addEventListener('input', () => {
+                    const hasText = this.textInput.value.trim().length > 0;
+                    this.nextButton.disabled = !hasText;
+                });
 
-        createBackgroundPlane() {
-            // Create a new image element to get dimensions
-            const img = new Image();
-            img.onload = () => {
-                // Calculate aspect ratio from the actual image
-                const aspectRatio = img.width / img.height;
+                this.backgroundInput.addEventListener('change', (e) => {
+                    this.handleFileUpload(e);
+                });
+
+                this.nextButton.addEventListener('click', () => {
+                    this.showCanvasScreen();
+                });
+
+                this.backButton.addEventListener('click', () => {
+                    this.showInputScreen();
+                });
+
+                // Animation control listeners
+                this.setStartBtn.addEventListener('click', () => {
+                    this.setKeyframe('start');
+                });
+
+                this.setEndBtn.addEventListener('click', () => {
+                    this.setKeyframe('end');
+                });
+
+                this.playBtn.addEventListener('click', () => {
+                    this.playAnimation();
+                });
+
+                // Touch and mouse events for orbit controls
+                this.setupOrbitControls();
+            }
+
+            handleFileUpload(event) {
+                const file = event.target.files[0];
+                const fileLabel = document.querySelector('.file-label');
                 
-                // Set a larger height and calculate width based on aspect ratio
-                const planeHeight = 20; // Much larger scale
-                const planeWidth = planeHeight * aspectRatio;
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        this.backgroundImage = e.target.result;
+                        
+                        // Update UI
+                        fileLabel.classList.add('has-file');
+                        fileLabel.querySelector('.file-label-text').textContent = 'Background Selected ✓';
+                        
+                        // Show preview
+                        this.filePreview.innerHTML = `
+                            <img src="${this.backgroundImage}" alt="Background preview">
+                            <div class="file-name">${file.name}</div>
+                        `;
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    // Reset if invalid file
+                    this.backgroundImage = null;
+                    fileLabel.classList.remove('has-file');
+                    fileLabel.querySelector('.file-label-text').textContent = 'Choose Background Image (Optional)';
+                    this.filePreview.innerHTML = '';
+                }
+            }
+
+            setupOrbitControls() {
+                let lastTouchDistance = 0;
                 
-                // Create geometry with correct aspect ratio
-                const geometry = new THREE.PlaneGeometry(planeWidth, planeHeight);
+                // Only prevent default touch behaviors on the 3D canvas area
+                const canvas3D = () => this.canvasContainer;
                 
-                // Create a large plane for the background image
-                const loader = new THREE.TextureLoader();
-                
-                // Load the background image with high quality settings
-                const texture = loader.load(this.backgroundImage, (loadedTexture) => {
-                    // Apply high-quality texture settings
-                    loadedTexture.minFilter = THREE.LinearFilter;
-                    loadedTexture.magFilter = THREE.LinearFilter;
-                    loadedTexture.format = THREE.RGBFormat;
-                    loadedTexture.generateMipmaps = false; // Disable for maximum sharpness
-                    loadedTexture.wrapS = THREE.ClampToEdgeWrap;
-                    loadedTexture.wrapT = THREE.ClampToEdgeWrap;
+                // Prevent context menu on long press
+                document.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
                 });
                 
-                // Create material
-                const material = new THREE.MeshBasicMaterial({
-                    map: texture,
-                    transparent: false
+                // Prevent zoom gestures only
+                document.addEventListener('gesturestart', (e) => {
+                    e.preventDefault();
                 });
+                
+                document.addEventListener('gesturechange', (e) => {
+                    e.preventDefault();
+                });
+                
+                document.addEventListener('gestureend', (e) => {
+                    e.preventDefault();
+                });
+                
+                // Mouse events
+                document.addEventListener('mousedown', (e) => {
+                    if (this.canvasScreen.classList.contains('hidden')) return;
+                    
+                    // Only handle mouse events on the canvas area
+                    if (canvas3D() && canvas3D().contains(e.target)) {
+                        this.isMouseDown = true;
+                        this.previousMousePosition = { x: e.clientX, y: e.clientY };
+                        e.preventDefault();
+                    }
+                });
+
+                document.addEventListener('mousemove', (e) => {
+                    if (!this.isMouseDown || this.canvasScreen.classList.contains('hidden')) return;
+                    this.handleRotation(e.clientX, e.clientY);
+                    e.preventDefault();
+                });
+
+                document.addEventListener('mouseup', (e) => {
+                    this.isMouseDown = false;
+                });
+
+                // Touch events for 3D controls - only on canvas area
+                document.addEventListener('touchstart', (e) => {
+                    if (this.canvasScreen.classList.contains('hidden')) return;
+                    
+                    // Only handle touch events on the canvas area
+                    if (canvas3D() && canvas3D().contains(e.target)) {
+                        if (e.touches.length === 1) {
+                            this.isMouseDown = true;
+                            this.previousMousePosition = { 
+                                x: e.touches[0].clientX, 
+                                y: e.touches[0].clientY 
+                            };
+                        } else if (e.touches.length === 2) {
+                            this.isMouseDown = false;
+                            const dx = e.touches[0].clientX - e.touches[1].clientX;
+                            const dy = e.touches[0].clientY - e.touches[1].clientY;
+                            lastTouchDistance = Math.sqrt(dx * dx + dy * dy);
+                        }
+                        e.preventDefault();
+                    }
+                }, { passive: false });
+
+                document.addEventListener('touchmove', (e) => {
+                    if (this.canvasScreen.classList.contains('hidden')) return;
+                    
+                    // Only handle touch events on the canvas area or if we're already dragging
+                    if ((canvas3D() && canvas3D().contains(e.target)) || this.isMouseDown) {
+                        if (e.touches.length === 1 && this.isMouseDown) {
+                            this.handleRotation(e.touches[0].clientX, e.touches[0].clientY);
+                        } else if (e.touches.length === 2) {
+                            const dx = e.touches[0].clientX - e.touches[1].clientX;
+                            const dy = e.touches[0].clientY - e.touches[1].clientY;
+                            const distance = Math.sqrt(dx * dx + dy * dy);
+                            
+                            if (lastTouchDistance > 0) {
+                                // More stable zoom calculation
+                                const scale = distance / lastTouchDistance;
+                                const zoomFactor = (scale - 1) * 2; // Adjust sensitivity
+                                this.targetDistance = Math.max(2, Math.min(15, this.targetDistance - zoomFactor));
+                            }
+                            lastTouchDistance = distance;
+                        }
+                        e.preventDefault();
+                    }
+                }, { passive: false });
+
+                document.addEventListener('touchend', (e) => {
+                    if (this.canvasScreen.classList.contains('hidden')) return;
+                    
+                    this.isMouseDown = false;
+                    // Only reset lastTouchDistance when all touches are gone
+                    if (e.touches.length === 0) {
+                        lastTouchDistance = 0;
+                    } else if (e.touches.length === 1) {
+                        // If we go from 2 touches to 1, stop zooming but don't reset distance
+                        lastTouchDistance = 0;
+                    }
+                });
+
+                // Mouse wheel for zoom
+                document.addEventListener('wheel', (e) => {
+                    if (this.canvasScreen.classList.contains('hidden')) return;
+                    
+                    // Only handle wheel events on the canvas area
+                    if (canvas3D() && canvas3D().contains(e.target)) {
+                        const delta = e.deltaY * 0.01;
+                        this.targetDistance = Math.max(2, Math.min(15, this.targetDistance + delta));
+                        e.preventDefault();
+                    }
+                }, { passive: false });
+
+                // Double tap to reset - only on canvas area
+                let lastTap = 0;
+                document.addEventListener('touchend', (e) => {
+                    if (this.canvasScreen.classList.contains('hidden')) return;
+                    
+                    if (canvas3D() && canvas3D().contains(e.target) && e.touches.length === 0) {
+                        const currentTime = new Date().getTime();
+                        const tapLength = currentTime - lastTap;
+                        if (tapLength < 500 && tapLength > 0) {
+                            console.log('Double tap detected - resetting camera'); // Debug log
+                            this.resetCamera();
+                        }
+                        lastTap = currentTime;
+                    }
+                });
+            }
+
+            handleRotation(clientX, clientY) {
+                const deltaMove = {
+                    x: clientX - this.previousMousePosition.x,
+                    y: clientY - this.previousMousePosition.y
+                };
+
+                this.targetRotation.y -= deltaMove.x * 0.01; // Inverted horizontal movement
+                this.targetRotation.x += deltaMove.y * 0.01;
+                
+                // Clamp vertical rotation
+                this.targetRotation.x = Math.max(-Math.PI/2, Math.min(Math.PI/2, this.targetRotation.x));
+
+                this.previousMousePosition = { x: clientX, y: clientY };
+            }
+
+            resetCamera() {
+                console.log('Camera reset triggered'); // Debug log
+                this.targetRotation = { x: 0, y: 0 };
+                this.targetDistance = 5;
+            }
+
+            showCanvasScreen() {
+                this.inputScreen.classList.add('hidden');
+                this.canvasScreen.classList.remove('hidden');
+                this.loading.style.display = 'block';
+                
+                setTimeout(() => {
+                    this.init3DScene();
+                }, 100);
+            }
+
+            showInputScreen() {
+                this.canvasScreen.classList.add('hidden');
+                this.inputScreen.classList.remove('hidden');
+                
+                if (this.renderer) {
+                    this.canvasContainer.removeChild(this.renderer.domElement);
+                    this.renderer.dispose();
+                    this.renderer = null;
+                }
+                
+                // Clean up meshes
+                if (this.textMesh) {
+                    this.scene.remove(this.textMesh);
+                    this.textMesh = null;
+                }
+                if (this.backgroundMesh) {
+                    this.scene.remove(this.backgroundMesh);
+                    this.backgroundMesh = null;
+                }
+            }
+
+            init3DScene() {
+                const text = this.textInput.value.trim();
+                
+                // Scene setup
+                this.scene = new THREE.Scene();
+                
+                // Camera setup
+                this.camera = new THREE.PerspectiveCamera(
+                    75, 
+                    window.innerWidth / window.innerHeight, 
+                    0.1, 
+                    1000
+                );
+                
+                // Renderer setup with maximum quality settings
+                this.renderer = new THREE.WebGLRenderer({ 
+                    antialias: true,
+                    alpha: true,
+                    powerPreference: "high-performance",
+                    precision: "highp"
+                });
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 3)); // Support up to 3x pixel density
+                this.renderer.setClearColor(0x000000);
+                this.renderer.shadowMap.enabled = true;
+                this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                this.renderer.outputEncoding = THREE.sRGBEncoding;
+                this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                this.renderer.toneMappingExposure = 1.0;
+                
+                this.canvasContainer.appendChild(this.renderer.domElement);
+
+                // Create background first (behind text)
+                if (this.backgroundImage) {
+                    this.createBackgroundPlane();
+                }
+
+                // Create 3D text (in front)
+                this.create3DText(text);
+                
+                // Lighting
+                this.setupLighting();
+                
+                // Start animation
+                this.animate();
+                
+                // Hide loading
+                this.loading.style.display = 'none';
+                
+                // Handle resize
+                window.addEventListener('resize', () => this.onWindowResize());
+            }
+
+            create3DText(text) {
+                // Use canvas-based 3D text as the primary method for reliability
+                this.createCanvasText(text);
+            }
+            
+            createCanvasText(text) {
+                // Split text into lines and handle multi-line rendering
+                const lines = text.split('\n').filter(line => line.trim().length > 0); // Remove empty lines
+                
+                // Create high-quality text using canvas with WebGL-safe dimensions
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                
+                // Calculate canvas size based on number of lines
+                const lineHeight = 220; // Space between lines
+                const padding = 100; // Top and bottom padding
+                canvas.width = 4096;
+                canvas.height = Math.max(1024, (lines.length * lineHeight) + (padding * 2));
+                
+                // Clear background to transparent
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Style the text with high quality settings
+                context.fillStyle = '#ffffff';
+                context.font = 'bold 200px system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
+                context.textAlign = 'center';
+                context.textBaseline = 'middle';
+                context.imageSmoothingEnabled = true;
+                context.imageSmoothingQuality = 'high';
+                
+                // Add text shadow for depth effect
+                context.shadowColor = '#888888';
+                context.shadowBlur = 12;
+                context.shadowOffsetX = 6;
+                context.shadowOffsetY = 6;
+                
+                // Draw each line of text
+                const startY = padding + (lineHeight / 2);
+                lines.forEach((line, index) => {
+                    const y = startY + (index * lineHeight);
+                    context.fillText(line.trim(), canvas.width / 2, y);
+                });
+                
+                // Create texture from canvas with highest quality settings
+                const texture = new THREE.CanvasTexture(canvas);
+                texture.needsUpdate = true;
+                texture.minFilter = THREE.LinearFilter;
+                texture.magFilter = THREE.LinearFilter;
+                texture.format = THREE.RGBAFormat;
+                texture.generateMipmaps = false; // Disable mipmaps for sharpest quality
+                texture.wrapS = THREE.ClampToEdgeWrap;
+                texture.wrapT = THREE.ClampToEdgeWrap;
+                
+                // Keep geometry consistent - don't stretch based on line count
+                const geometry = new THREE.BoxGeometry(6, 1.5, 0.4);
+                
+                // Create materials array - text only on front face, transparent elsewhere
+                const materials = [
+                    new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 }), // Right side - invisible
+                    new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 }), // Left side - invisible  
+                    new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 }), // Top - invisible
+                    new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 }), // Bottom - invisible
+                    new THREE.MeshBasicMaterial({ // Front face - visible with text
+                        map: texture,
+                        transparent: true,
+                        alphaTest: 0.1
+                    }),
+                    new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 }) // Back - invisible
+                ];
                 
                 // Create the mesh
-                this.backgroundMesh = new THREE.Mesh(geometry, material);
+                this.textMesh = new THREE.Mesh(geometry, materials);
+                this.textMesh.castShadow = false;
+                this.textMesh.receiveShadow = false;
                 
-                // Position it closer behind the text (reduced Z distance)
-                this.backgroundMesh.position.z = -1.5;
+                this.scene.add(this.textMesh);
                 
-                this.scene.add(this.backgroundMesh);
-            };
-            
-            // Set the image source to trigger the onload
-            img.src = this.backgroundImage;
+                // Hide loading indicator
+                this.loading.style.display = 'none';
+            }
+
+            // Keyframe and Animation System
+            setKeyframe(type) {
+                const currentKeyframe = {
+                    rotation: { ...this.rotation },
+                    distance: this.distance
+                };
+
+                this.keyframes[type] = currentKeyframe;
+
+                if (type === 'start') {
+                    this.setStartBtn.classList.add('set');
+                    this.setStartBtn.textContent = '✓ Start';
+                    this.setEndBtn.disabled = false;
+                    this.keyframeStatus.textContent = 'Start keyframe set! Now position camera for end keyframe';
+                } else if (type === 'end') {
+                    this.setEndBtn.classList.add('set');
+                    this.setEndBtn.textContent = '✓ End';
+                    this.playBtn.disabled = false;
+                    this.keyframeStatus.textContent = 'Both keyframes set! Ready to play animation';
+                }
+
+                console.log(`${type} keyframe set:`, currentKeyframe);
+            }
+
+            playAnimation() {
+                if (!this.keyframes.start || !this.keyframes.end) {
+                    return;
+                }
+
+                this.isAnimating = true;
+                this.animationStartTime = performance.now();
+                
+                // Disable controls during animation
+                this.setStartBtn.disabled = true;
+                this.setEndBtn.disabled = true;
+                this.playBtn.disabled = true;
+                this.playBtn.textContent = 'Playing...';
+                this.keyframeStatus.textContent = 'Animation playing (7 seconds)';
+
+                console.log('Animation started');
+            }
+
+            updateAnimation() {
+                if (!this.isAnimating) return;
+
+                const currentTime = performance.now();
+                const elapsed = currentTime - this.animationStartTime;
+                const progress = Math.min(elapsed / this.animationDuration, 1);
+
+                // Smooth easing function (ease-in-out)
+                const easeInOut = (t) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+                const easedProgress = easeInOut(progress);
+
+                // Interpolate between start and end keyframes
+                const start = this.keyframes.start;
+                const end = this.keyframes.end;
+
+                // Interpolate rotation
+                this.rotation.x = start.rotation.x + (end.rotation.x - start.rotation.x) * easedProgress;
+                this.rotation.y = start.rotation.y + (end.rotation.y - start.rotation.y) * easedProgress;
+                
+                // Interpolate distance
+                this.distance = start.distance + (end.distance - start.distance) * easedProgress;
+
+                // Update targets to match animation
+                this.targetRotation.x = this.rotation.x;
+                this.targetRotation.y = this.rotation.y;
+                this.targetDistance = this.distance;
+
+                // Check if animation is complete
+                if (progress >= 1) {
+                    this.isAnimating = false;
+                    
+                    // Re-enable controls
+                    this.setStartBtn.disabled = false;
+                    this.setEndBtn.disabled = false;
+                    this.playBtn.disabled = false;
+                    this.playBtn.textContent = '▶ Play (7s)';
+                    this.keyframeStatus.textContent = 'Animation complete! Adjust camera or replay';
+                    
+                    console.log('Animation completed');
+                }
+            }
+
+            createBackgroundPlane() {
+                // Create a new image element to get dimensions
+                const img = new Image();
+                img.onload = () => {
+                    // Calculate aspect ratio from the actual image
+                    const aspectRatio = img.width / img.height;
+                    
+                    // Set a larger height and calculate width based on aspect ratio
+                    const planeHeight = 20; // Much larger scale
+                    const planeWidth = planeHeight * aspectRatio;
+                    
+                    // Create geometry with correct aspect ratio
+                    const geometry = new THREE.PlaneGeometry(planeWidth, planeHeight);
+                    
+                    // Create a large plane for the background image
+                    const loader = new THREE.TextureLoader();
+                    
+                    // Load the background image with high quality settings
+                    const texture = loader.load(this.backgroundImage, (loadedTexture) => {
+                        // Apply high-quality texture settings
+                        loadedTexture.minFilter = THREE.LinearFilter;
+                        loadedTexture.magFilter = THREE.LinearFilter;
+                        loadedTexture.format = THREE.RGBFormat;
+                        loadedTexture.generateMipmaps = false; // Disable for maximum sharpness
+                        loadedTexture.wrapS = THREE.ClampToEdgeWrap;
+                        loadedTexture.wrapT = THREE.ClampToEdgeWrap;
+                    });
+                    
+                    // Create material
+                    const material = new THREE.MeshBasicMaterial({
+                        map: texture,
+                        transparent: false
+                    });
+                    
+                    // Create the mesh
+                    this.backgroundMesh = new THREE.Mesh(geometry, material);
+                    
+                    // Position it closer behind the text (reduced Z distance)
+                    this.backgroundMesh.position.z = -1.5;
+                    
+                    this.scene.add(this.backgroundMesh);
+                };
+                
+                // Set the image source to trigger the onload
+                img.src = this.backgroundImage;
+            }
+
+            setupLighting() {
+                // Ambient light
+                const ambientLight = new THREE.AmbientLight(0x404040, 0.3);
+                this.scene.add(ambientLight);
+
+                // Main directional light
+                const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+                directionalLight.position.set(5, 5, 5);
+                directionalLight.castShadow = true;
+                directionalLight.shadow.mapSize.width = 2048;
+                directionalLight.shadow.mapSize.height = 2048;
+                this.scene.add(directionalLight);
+
+                // Fill light
+                const fillLight = new THREE.DirectionalLight(0x4a90e2, 0.3);
+                fillLight.position.set(-5, 0, 2);
+                this.scene.add(fillLight);
+
+                // Rim light
+                const rimLight = new THREE.DirectionalLight(0xffffff, 0.5);
+                rimLight.position.set(0, 5, -5);
+                this.scene.add(rimLight);
+            }
+
+            animate() {
+                if (!this.renderer) return;
+                
+                requestAnimationFrame(() => this.animate());
+
+                // Update animation if playing
+                this.updateAnimation();
+
+                // Only apply smooth camera movement if not animating
+                if (!this.isAnimating) {
+                    // Smooth camera movement
+                    this.rotation.x += (this.targetRotation.x - this.rotation.x) * 0.1;
+                    this.rotation.y += (this.targetRotation.y - this.rotation.y) * 0.1;
+                    this.distance += (this.targetDistance - this.distance) * 0.1;
+                }
+
+                // Update camera position based on rotation and distance
+                this.camera.position.x = Math.sin(this.rotation.y) * Math.cos(this.rotation.x) * this.distance;
+                this.camera.position.y = Math.sin(this.rotation.x) * this.distance;
+                this.camera.position.z = Math.cos(this.rotation.y) * Math.cos(this.rotation.x) * this.distance;
+                
+                this.camera.lookAt(0, 0, 0);
+
+                this.renderer.render(this.scene, this.camera);
+            }
+
+            onWindowResize() {
+                if (!this.camera || !this.renderer) return;
+                
+                this.camera.aspect = window.innerWidth / window.innerHeight;
+                this.camera.updateProjectionMatrix();
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 3)); // Maintain high pixel ratio on resize
+            }
         }
 
-        setupLighting() {
-            // Ambient light
-            const ambientLight = new THREE.AmbientLight(0x404040, 0.3);
-            this.scene.add(ambientLight);
-
-            // Main directional light
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-            directionalLight.position.set(5, 5, 5);
-            directionalLight.castShadow = true;
-            directionalLight.shadow.mapSize.width = 2048;
-            directionalLight.shadow.mapSize.height = 2048;
-            this.scene.add(directionalLight);
-
-            // Fill light
-            const fillLight = new THREE.DirectionalLight(0x4a90e2, 0.3);
-            fillLight.position.set(-5, 0, 2);
-            this.scene.add(fillLight);
-
-            // Rim light
-            const rimLight = new THREE.DirectionalLight(0xffffff, 0.5);
-            rimLight.position.set(0, 5, -5);
-            this.scene.add(rimLight);
-        }
-
-        animate() {
-            if (!this.renderer) return;
-            
-            requestAnimationFrame(() => this.animate());
-
-            // Smooth camera movement
-            this.rotation.x += (this.targetRotation.x - this.rotation.x) * 0.1;
-            this.rotation.y += (this.targetRotation.y - this.rotation.y) * 0.1;
-            this.distance += (this.targetDistance - this.distance) * 0.1;
-
-            // Update camera position based on rotation and distance
-            this.camera.position.x = Math.sin(this.rotation.y) * Math.cos(this.rotation.x) * this.distance;
-            this.camera.position.y = Math.sin(this.rotation.x) * this.distance;
-            this.camera.position.z = Math.cos(this.rotation.y) * Math.cos(this.rotation.x) * this.distance;
-            
-            this.camera.lookAt(0, 0, 0);
-
-            this.renderer.render(this.scene, this.camera);
-        }
-
-        onWindowResize() {
-            if (!this.camera || !this.renderer) return;
-            
-            this.camera.aspect = window.innerWidth / window.innerHeight;
-            this.camera.updateProjectionMatrix();
-            this.renderer.setSize(window.innerWidth, window.innerHeight);
-            this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 3)); // Maintain high pixel ratio on resize
-        }
-    }
-
-    // Initialize the app when DOM is loaded
-    document.addEventListener('DOMContentLoaded', () => {
-        new TextGenerator3D();
-    });
-
-    // Service Worker for PWA functionality
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            const swCode = `
-                const CACHE_NAME = '3d-text-generator-v1';
-                const urlsToCache = ['/'];
-                
-                self.addEventListener('install', event => {
-                    event.waitUntil(
-                        caches.open(CACHE_NAME)
-                            .then(cache => cache.addAll(urlsToCache))
-                    );
-                });
-                
-                self.addEventListener('fetch', event => {
-                    event.respondWith(
-                        caches.match(event.request)
-                            .then(response => response || fetch(event.request))
-                    );
-                });
-            `;
-            
-            const blob = new Blob([swCode], { type: 'application/javascript' });
-            const swUrl = URL.createObjectURL(blob);
-            
-            navigator.serviceWorker.register(swUrl)
-                .then(() => console.log('SW registered'))
-                .catch(() => console.log('SW registration failed'));
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new TextGenerator3D();
         });
-    }
-</script>
-```
 
+        // Service Worker for PWA functionality
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                const swCode = `
+                    const CACHE_NAME = '3d-text-generator-v1';
+                    const urlsToCache = ['/'];
+                    
+                    self.addEventListener('install', event => {
+                        event.waitUntil(
+                            caches.open(CACHE_NAME)
+                                .then(cache => cache.addAll(urlsToCache))
+                        );
+                    });
+                    
+                    self.addEventListener('fetch', event => {
+                        event.respondWith(
+                            caches.match(event.request)
+                                .then(response => response || fetch(event.request))
+                        );
+                    });
+                `;
+                
+                const blob = new Blob([swCode], { type: 'application/javascript' });
+                const swUrl = URL.createObjectURL(blob);
+                
+                navigator.serviceWorker.register(swUrl)
+                    .then(() => console.log('SW registered'))
+                    .catch(() => console.log('SW registration failed'));
+            });
+        }
+    </script>
 </body>
 </html>
