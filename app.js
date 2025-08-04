@@ -452,7 +452,7 @@ class TextGenerator3D {
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         this.renderer.outputEncoding = THREE.sRGBEncoding;
         this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        this.renderer.toneMappingExposure = 1.0;
+        this.renderer.toneMappingExposure = 0.3; // Much darker exposure
         
         this.canvasContainer.appendChild(this.renderer.domElement);
 
@@ -983,25 +983,25 @@ class TextGenerator3D {
     }
 
     setupLighting() {
-        // Ambient light - much darker
-        const ambientLight = new THREE.AmbientLight(0x404040, 0.03);
+        // Ambient light - very dark
+        const ambientLight = new THREE.AmbientLight(0x404040, 0.01);
         this.scene.add(ambientLight);
 
-        // Main directional light - much darker
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.08);
+        // Main directional light - very dark
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.03);
         directionalLight.position.set(5, 5, 5);
         directionalLight.castShadow = true;
         directionalLight.shadow.mapSize.width = 2048;
         directionalLight.shadow.mapSize.height = 2048;
         this.scene.add(directionalLight);
 
-        // Fill light - much darker
-        const fillLight = new THREE.DirectionalLight(0x4a90e2, 0.03);
+        // Fill light - very dark
+        const fillLight = new THREE.DirectionalLight(0x4a90e2, 0.01);
         fillLight.position.set(-5, 0, 2);
         this.scene.add(fillLight);
 
-        // Rim light - much darker
-        const rimLight = new THREE.DirectionalLight(0xffffff, 0.05);
+        // Rim light - very dark
+        const rimLight = new THREE.DirectionalLight(0xffffff, 0.02);
         rimLight.position.set(0, 5, -5);
         this.scene.add(rimLight);
     }
