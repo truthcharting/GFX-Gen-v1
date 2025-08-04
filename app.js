@@ -574,8 +574,7 @@ class TextGenerator3D {
             const material = new THREE.MeshBasicMaterial({
                 map: texture,
                 transparent: true,
-                alphaTest: 0.1,
-                alphaMap: texture // Use the same texture for alpha mapping
+                alphaTest: 0.1
             });
             
             // Create the mesh
