@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Text Generator</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
+            font-weight: 800;
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            position: fixed;
+            -webkit-overflow-scrolling: touch;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
+            overflow: hidden;
+        }
+
+        .screen.hidden {
+            transform: translateX(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Input Screen */
+        .input-screen {
+            flex-direction: column;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+        }
+
+        .container {
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .title {
+            font-size: 2.5em;
+            font-weight: 800;
+            margin-bottom: 0.5em;
+            background: linear-gradient(45deg, #fff, #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            color: #888;
+            margin-bottom: 2em;
+            font-weight: 800;
+        }
+
+        .input-group {
+            margin-bottom: 2em;
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 1em;
+            background: #111;
+            border: 2px solid #333;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1.1em;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            resize: none;
+            min-height: 120px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            touch-action: manipulation;
+            user-select: text;
+            -webkit-user-select: text;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: #4a90e2;
+            box-shadow: 0 0 20px rgba(74, 144, 226, 0.3);
+        }
+
+        .text-input::placeholder {
+            color: #555;
+        }
+
+        .next-button {
+            background: linear-gradient(45deg, #4a90e2, #357abd);
+            border: none;
+            padding: 1em 2em;
+            border-radius: 25px;
+            color: #fff;
+            font-size: 1.1em;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+            touch-action: manipulation;
+        }
+
+        .next-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(74, 144, 226, 0.4);
+        }
+
+        .next-button:active {
+            transform: translateY(0);
+        }
+
+        .next-button:disabled {
+            background: #333;
+            color: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* File Upload Styling */
+        .file-label {
+            display: block;
+            width: 100%;
+            padding: 1em;
+            background: #111;
+            border: 2px dashed #333;
+            border-radius: 12px;
+            color: #888;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1em;
+            touch-action: manipulation;
+        }
+
+        .file-label:hover {
+            border-color: #4a90e2;
+            background: #151515;
+        }
+
+        .file-label.has-file {
+            border-color: #4a90e2;
+            background: rgba(74, 144, 226, 0.1);
+            color: #4a90e2;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-label-text {
+            display: block;
+            font-size: 1em;
+        }
+
+        .file-preview {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .file-preview img {
+            max-width: 200px;
+            max-height: 100px;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+
+        .file-preview .file-name {
+            color: #4a90e2;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        /* 3D Screen */
+        .canvas-screen {
+            background: #000;
+            touch-action: none;
+        }
+
+        #canvas-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            touch-action: none;
+            overflow: hidden;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #333;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            touch-action: manipulation;
+        }
+
+        .back-button:hover {
+            background: rgba(74, 144, 226, 0.8);
+            border-color: #4a90e2;
+        }
+
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #4a90e2;
+            font-size: 1.2em;
+            z-index: 50;
+        }
+
+        .controls {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px 25px;
+            border-radius: 25px;
+            color: #fff;
+            font-size: 0.9em;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            border: 1px solid #333;
+        }
+
+        /* Animation Controls */
+        .animation-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px 20px;
+            border-radius: 20px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            z-index: 101;
+            backdrop-filter: blur(10px);
+            border: 1px solid #333;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .keyframe-btn, .play-btn, .render-btn {
+            background: linear-gradient(45deg, #4a90e2, #357abd);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 15px;
+            color: #fff;
+            font-size: 0.9em;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            touch-action: manipulation;
+            min-width: 70px;
+        }
+
+        .keyframe-btn:hover, .play-btn:hover, .render-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.4);
+        }
+
+        .keyframe-btn:disabled, .play-btn:disabled, .render-btn:disabled {
+            background: #333;
+            color: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .keyframe-btn.set {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+        }
+
+        .play-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            font-size: 1em;
+            padding: 10px 20px;
+        }
+
+        .render-btn {
+            background: linear-gradient(45deg, #9c27b0, #7b1fa2);
+            font-size: 1em;
+            padding: 10px 16px;
+            min-width: 100px;
+        }
+
+        /* Video Modal */
+        .video-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .video-modal.show {
+            display: flex;
+        }
+
+        .video-modal-content {
+            background: #111;
+            border-radius: 20px;
+            padding: 20px;
+            max-width: 90vw;
+            max-height: 90vh;
+            border: 1px solid #333;
+            position: relative;
+        }
+
+        .video-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .video-modal-header h3 {
+            color: #fff;
+            margin: 0;
+            font-size: 1.3em;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5em;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        #renderedVideo {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            border-radius: 10px;
+            background: #000;
+            pointer-events: auto;
+            -webkit-touch-callout: default;
+            -webkit-user-select: auto;
+            user-select: auto;
+        }
+
+        .video-instructions {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .video-instructions p {
+            color: #ccc;
+            margin: 8px 0;
+            font-size: 0.9em;
+        }
+
+        .download-fallback {
+            background: linear-gradient(45deg, #666, #555);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 15px;
+            color: #fff;
+            font-size: 0.9em;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .download-fallback:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .keyframe-status {
+            color: #aaa;
+            font-size: 0.8em;
+            text-align: center;
+            width: 100%;
+            margin-top: 5px;
+        }
+
+        /* Animation Options Styling */
+        .animation-options {
+            margin-top: 1em;
+            padding: 1em;
+            background: #111;
+            border: 2px solid #333;
+            border-radius: 12px;
+            transition: border-color 0.3s ease;
+        }
+
+        .animation-options-title {
+            color: #888;
+            font-size: 0.9em;
+            font-weight: 800;
+            margin-bottom: 0.8em;
+            text-align: center;
+        }
+
+        .animation-checkboxes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8em;
+            justify-content: center;
+        }
+
+        .animation-checkbox {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .animation-checkbox input[type="radio"] {
+            display: none;
+        }
+
+        .checkbox-custom {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #333;
+            border-radius: 50%;
+            margin-right: 8px;
+            position: relative;
+            transition: all 0.3s ease;
+            background: #111;
+        }
+
+        .animation-checkbox input[type="radio"]:checked + .checkbox-custom {
+            border-color: #4a90e2;
+            background: #4a90e2;
+        }
+
+        .animation-checkbox input[type="radio"]:checked + .checkbox-custom::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 6px;
+            height: 6px;
+            background: #fff;
+            border-radius: 50%;
+        }
+
+        .checkbox-label {
+            color: #ccc;
+            font-size: 0.9em;
+            font-weight: 800;
+            transition: color 0.3s ease;
+        }
+
+        .animation-checkbox:hover .checkbox-label {
+            color: #4a90e2;
+        }
+
+        .animation-checkbox:hover .checkbox-custom {
+            border-color: #4a90e2;
+        }
+
+        @media (max-width: 600px) {
+            .title {
+                font-size: 2em;
+            }
+            
+            .container {
+                width: 95%;
+            }
+            
+            .controls {
+                bottom: 130px;
+                font-size: 0.8em;
+                padding: 10px 20px;
+            }
+            
+            .animation-controls {
+                bottom: 10px;
+                padding: 10px 15px;
+                gap: 8px;
+            }
+            
+            .keyframe-btn, .play-btn, .render-btn {
+                font-size: 0.8em;
+                padding: 6px 12px;
+                min-width: 60px;
+            }
+            
+            .keyframe-status {
+                font-size: 0.7em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Input Screen -->
+    <div class="screen input-screen" id="inputScreen">
+        <div class="container">
+            <h1 class="title">3D Text Generator</h1>
+            <p class="subtitle">Transform your words into stunning 3D graphics</p>
+            
+            <div class="input-group">
+                <textarea 
+                    class="text-input" 
+                    id="textInput" 
+                    placeholder="Enter your text here...&#10;Try something creative!"
+                    maxlength="100"
+                ></textarea>
+            </div>
+            
+            <div class="input-group">
+                <label class="file-label" for="foregroundInput">
+                    <span class="file-label-text">Choose Foreground Image (Optional - replaces text)</span>
+                    <input type="file" id="foregroundInput" class="file-input" accept="image/*">
+                </label>
+                <div class="file-preview" id="foregroundPreview"></div>
+                
+                <!-- Animation Options -->
+                <div class="animation-options" id="animationOptions" style="display: none;">
+                    <div class="animation-options-title">Entrance Animation:</div>
+                    <div class="animation-checkboxes">
+                        <label class="animation-checkbox">
+                            <input type="radio" name="entranceAnimation" value="fromTop" id="fromTop">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-label">From Top</span>
+                        </label>
+                        <label class="animation-checkbox">
+                            <input type="radio" name="entranceAnimation" value="fromBottom" id="fromBottom">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-label">From Bottom</span>
+                        </label>
+                        <label class="animation-checkbox">
+                            <input type="radio" name="entranceAnimation" value="fromLeft" id="fromLeft">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-label">From Left</span>
+                        </label>
+                        <label class="animation-checkbox">
+                            <input type="radio" name="entranceAnimation" value="fromRight" id="fromRight">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-label">From Right</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label class="file-label" for="backgroundInput">
+                    <span class="file-label-text">Choose Background Image (Optional)</span>
+                    <input type="file" id="backgroundInput" class="file-input" accept="image/*">
+                </label>
+                <div class="file-preview" id="filePreview"></div>
+            </div>
+            
+            <button class="next-button" id="nextButton" disabled>
+                Generate 3D Text
+            </button>
+        </div>
+    </div>
+
+    <!-- 3D Canvas Screen -->
+    <div class="screen canvas-screen hidden" id="canvasScreen">
+        <button class="back-button" id="backButton">← Back</button>
+        <div class="loading" id="loading">Loading 3D scene...</div>
+        <div id="canvas-container"></div>
+        <div class="controls">
+            Drag to rotate • Pinch to zoom • Double-tap to reset
+        </div>
+        
+        <!-- Animation Controls -->
+        <div class="animation-controls" id="animationControls">
+            <button class="keyframe-btn" id="setStartBtn">Set Start</button>
+            <button class="keyframe-btn" id="setEndBtn" disabled>Set End</button>
+            <button class="play-btn" id="playBtn" disabled>▶ Play (7s)</button>
+            <button class="render-btn" id="renderBtn" disabled>🎥 Render Video</button>
+            <div class="keyframe-status" id="keyframeStatus">Position camera and set start keyframe</div>
+        </div>
+
+        <!-- Video Player Modal -->
+        <div class="video-modal" id="videoModal">
+            <div class="video-modal-content">
+                <div class="video-modal-header">
+                    <h3>🎉 Video Ready!</h3>
+                    <button class="close-modal" id="closeModal">×</button>
+                </div>
+                <video id="renderedVideo" controls playsinline webkit-playsinline>
+                    Your browser doesn't support video playback.
+                </video>
+                <div class="video-instructions">
+                    <p><strong>📱 iPhone:</strong> Long press video → "Save Video" → Camera Roll!</p>
+                    <p><strong>🖥️ Desktop:</strong> Right click video → "Save video as..."</p>
+                    <button class="download-fallback" id="downloadFallback">📥 Download File Instead</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html> 
