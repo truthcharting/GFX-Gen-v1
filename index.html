@@ -230,6 +230,27 @@
             border-color: #4a90e2;
         }
 
+        .camera-mode-indicator {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #333;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 15px;
+            font-family: inherit;
+            font-size: 0.8em;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .camera-mode-indicator.panning {
+            background: rgba(255, 165, 0, 0.8);
+            border-color: #ffa500;
+        }
+
         .loading {
             position: absolute;
             top: 50%;
@@ -609,10 +630,11 @@
     <!-- 3D Canvas Screen -->
     <div class="screen canvas-screen hidden" id="canvasScreen">
         <button class="back-button" id="backButton">← Back</button>
+        <div class="camera-mode-indicator" id="cameraModeIndicator">Orbit Mode</div>
         <div class="loading" id="loading">Loading 3D scene...</div>
         <div id="canvas-container"></div>
         <div class="controls">
-            Drag to rotate • Pinch to zoom • Double-tap to reset
+            Drag to rotate • Shift+Drag to pan • Pinch to zoom • Double-tap to reset
         </div>
         
         <!-- Animation Controls -->

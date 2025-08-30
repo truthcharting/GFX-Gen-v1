@@ -12,6 +12,7 @@ class TextGenerator3D {
         this.targetRotation = { x: 0, y: 0 };
         this.distance = 5;
         this.targetDistance = 5;
+        this.pointOfInterest = new THREE.Vector3(0, 0, 0); // Point of interest for camera
         this.backgroundImage = null;
         this.foregroundImage = null;
         this.entranceAnimation = null;
@@ -68,6 +69,9 @@ class TextGenerator3D {
         this.renderedVideo = document.getElementById('renderedVideo');
         this.closeModal = document.getElementById('closeModal');
         this.downloadFallback = document.getElementById('downloadFallback');
+        
+        // Camera mode indicator
+        this.cameraModeIndicator = document.getElementById('cameraModeIndicator');
     }
 
     setupEventListeners() {
@@ -247,6 +251,7 @@ class TextGenerator3D {
             // Only handle mouse events on the canvas area
             if (canvas3D() && canvas3D().contains(e.target)) {
                 this.isMouseDown = true;
+                this.isPanning = e.shiftKey; // Track if we're panning (shift + click)
                 this.previousMousePosition = { x: e.clientX, y: e.clientY };
                 e.preventDefault();
             }
@@ -254,12 +259,25 @@ class TextGenerator3D {
 
         document.addEventListener('mousemove', (e) => {
             if (!this.isMouseDown || this.canvasScreen.classList.contains('hidden')) return;
-            this.handleRotation(e.clientX, e.clientY);
+            
+            // Check if shift key state changed during drag
+            if (this.isMouseDown && e.shiftKey !== this.isPanning) {
+                this.isPanning = e.shiftKey;
+            }
+            
+            if (this.isPanning) {
+                this.handlePan(e.clientX, e.clientY);
+                this.updateCameraModeIndicator('Pan Mode');
+            } else {
+                this.handleRotation(e.clientX, e.clientY);
+                this.updateCameraModeIndicator('Orbit Mode');
+            }
             e.preventDefault();
         });
 
         document.addEventListener('mouseup', (e) => {
             this.isMouseDown = false;
+            this.isPanning = false;
         });
 
         // Touch events for 3D controls - only on canvas area
@@ -365,10 +383,56 @@ class TextGenerator3D {
         this.previousMousePosition = { x: clientX, y: clientY };
     }
 
+    handlePan(clientX, clientY) {
+        const deltaMove = {
+            x: clientX - this.previousMousePosition.x,
+            y: clientY - this.previousMousePosition.y
+        };
+
+        // Calculate pan speed based on distance from camera
+        const panSpeed = this.distance * 0.001;
+        
+        // Calculate right and up vectors in world space
+        const right = new THREE.Vector3();
+        const up = new THREE.Vector3();
+        
+        // Get camera's right vector (perpendicular to view direction)
+        right.setFromMatrixColumn(this.camera.matrix, 0);
+        right.normalize();
+        
+        // Get camera's up vector
+        up.setFromMatrixColumn(this.camera.matrix, 1);
+        up.normalize();
+        
+        // Calculate pan movement in world space
+        const panX = right.multiplyScalar(-deltaMove.x * panSpeed);
+        const panY = up.multiplyScalar(deltaMove.y * panSpeed); // Inverted Y movement
+        
+        // Move both camera position and point of interest
+        this.camera.position.add(panX);
+        this.camera.position.add(panY);
+        this.pointOfInterest.add(panX);
+        this.pointOfInterest.add(panY);
+        
+        this.previousMousePosition = { x: clientX, y: clientY };
+    }
+
+    updateCameraModeIndicator(mode) {
+        if (this.cameraModeIndicator) {
+            this.cameraModeIndicator.textContent = mode;
+            if (mode === 'Pan Mode') {
+                this.cameraModeIndicator.classList.add('panning');
+            } else {
+                this.cameraModeIndicator.classList.remove('panning');
+            }
+        }
+    }
+
     resetCamera() {
         console.log('Camera reset triggered'); // Debug log
         this.targetRotation = { x: 0, y: 0 };
         this.targetDistance = 5;
+        this.pointOfInterest.set(0, 0, 0); // Reset point of interest to origin
     }
 
     showCanvasScreen() {
@@ -728,7 +792,8 @@ class TextGenerator3D {
     setKeyframe(type) {
         const currentKeyframe = {
             rotation: { ...this.rotation },
-            distance: this.distance
+            distance: this.distance,
+            pointOfInterest: this.pointOfInterest.clone()
         };
 
         this.keyframes[type] = currentKeyframe;
@@ -794,6 +859,9 @@ class TextGenerator3D {
         
         // Interpolate distance
         this.distance = start.distance + (end.distance - start.distance) * easedProgress;
+        
+        // Interpolate point of interest
+        this.pointOfInterest.lerpVectors(start.pointOfInterest, end.pointOfInterest, easedProgress);
 
         // Update targets to match animation
         this.targetRotation.x = this.rotation.x;
@@ -1228,12 +1296,12 @@ class TextGenerator3D {
             this.distance += (this.targetDistance - this.distance) * 0.1;
         }
 
-        // Update camera position based on rotation and distance
-        this.camera.position.x = Math.sin(this.rotation.y) * Math.cos(this.rotation.x) * this.distance;
-        this.camera.position.y = Math.sin(this.rotation.x) * this.distance;
-        this.camera.position.z = Math.cos(this.rotation.y) * Math.cos(this.rotation.x) * this.distance;
+        // Update camera position based on rotation and distance, relative to point of interest
+        this.camera.position.x = this.pointOfInterest.x + Math.sin(this.rotation.y) * Math.cos(this.rotation.x) * this.distance;
+        this.camera.position.y = this.pointOfInterest.y + Math.sin(this.rotation.x) * this.distance;
+        this.camera.position.z = this.pointOfInterest.z + Math.cos(this.rotation.y) * Math.cos(this.rotation.x) * this.distance;
         
-        this.camera.lookAt(0, 0, 0);
+        this.camera.lookAt(this.pointOfInterest);
 
         // Render scene directly (DOF disabled)
         this.renderer.render(this.scene, this.camera);
